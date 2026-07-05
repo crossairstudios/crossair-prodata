@@ -1,4 +1,9 @@
 {
+  "lastUpdated": "06.07.2026",
+  "pros": [ ... ],
+  "gamePresets": [ ... ]
+}
+{
   "pros": [
     { "name": "s1mple", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#ffff00" },
     { "name": "ZywOo", "game": "CS2", "cl_crosshairsize": 1.5, "cl_crosshairthickness": 1, "cl_crosshairgap": -3, "cl_crosshairdot": 0, "color": "#00ff00" },
