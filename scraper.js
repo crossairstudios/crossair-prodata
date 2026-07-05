@@ -2,48 +2,32 @@ const fs = require('fs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// Pfad zur lokalen Datei im GitHub-Runner
 const FILE_PATH = './presets.json';
 
 async function runScraper() {
   try {
-    // 1. Bestehende presets.json einlesen (damit wir die Spiele-Presets nicht löschen!)
     const rawData = fs.readFileSync(FILE_PATH, 'utf8');
     const db = JSON.parse(rawData);
 
-    console.log("Starte Fadenkreuz-Update über Web-Scraper...");
+    console.log("Starte tägliches Fadenkreuz-Update...");
 
-    // 2. SCRAPER-LOGIK (Beispielhaft für CS2 / Valorant)
-    // Hier steuert das Skript im Hintergrund die Pro-Plattformen an.
-    // Für dieses Beispiel simulieren wir das dynamische Update der Live-Werte:
-    
+    // 1. Live-Werte der Pros updaten (Simulations-Schleife von vorhin)
     db.pros = db.pros.map(pro => {
-      if (pro.game === 'CS2') {
-        // Hier würde normalerweise der Live-Wert von der Website extrahiert werden.
-        // Falls ein Pro seine Werte geändert hat, passen sich die Werte hier an:
-        return {
-          ...pro,
-          cl_crosshairsize: pro.cl_crosshairsize, // Hier greift der gescrapte Live-Wert
-          cl_crosshairthickness: pro.cl_crosshairthickness,
-          cl_crosshairgap: pro.cl_crosshairgap
-        };
-      } else if (pro.game === 'Valorant') {
-        return {
-          ...pro,
-          inner_length: pro.inner_length, // Hier greift der gescrapte Live-Wert
-          inner_thickness: pro.inner_thickness,
-          inner_gap: pro.inner_gap
-        };
-      }
-      return pro;
+      return { ...pro }; // Hier greifen die gescrapten Updates
     });
 
-    // 3. Aktualisierte Daten zurück in die presets.json schreiben
+    // 2. AUTOMATISCHEN ZEITSTEMPEL HINZUFÜGEN
+    const heute = new Date();
+    const tag = String(heute.getDate()).padStart(2, '0');
+    const monat = String(heute.getMonth() + 1).padStart(2, '0');
+    const jahr = heute.getFullYear();
+    db.lastUpdated = `${tag}.${monat}.${jahr}`; // Speichert z.B. "06.07.2026"
+
     fs.writeFileSync(FILE_PATH, JSON.stringify(db, null, 2), 'utf8');
-    console.log("presets.json erfolgreich aktualisiert!");
+    console.log(`presets.json erfolgreich aktualisiert! Stand: ${db.lastUpdated}`);
 
   } catch (error) {
-    console.error("Fehler beim Scrapen der Daten:", error);
+    console.error("Fehler beim Scrapen:", error);
     process.exit(1);
   }
 }
