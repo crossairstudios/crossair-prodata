@@ -1,0 +1,58 @@
+{
+  "pros": [
+    { "name": "s1mple", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#ffff00" },
+    { "name": "ZywOo", "game": "CS2", "cl_crosshairsize": 1.5, "cl_crosshairthickness": 1, "cl_crosshairgap": -3, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "NiKo", "game": "CS2", "cl_crosshairsize": 1, "cl_crosshairthickness": 1, "cl_crosshairgap": -4, "cl_crosshairdot": 1, "color": "#00ffff" },
+    { "name": "m0NESY", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 0.5, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#ffffff" },
+    { "name": "donk", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -1, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "device", "game": "CS2", "cl_crosshairsize": 3, "cl_crosshairthickness": 1, "cl_crosshairgap": -1, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "EliGE", "game": "CS2", "cl_crosshairsize": 1.5, "cl_crosshairthickness": 1.5, "cl_crosshairgap": 0, "cl_crosshairdot": 0, "color": "#ff0000" },
+    { "name": "ropz", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -3, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "Twistzz", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#00ffff" },
+    { "name": "broky", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#ffff00" },
+    { "name": "rain", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#ffffff" },
+    { "name": "karrigan", "game": "CS2", "cl_crosshairsize": 3, "cl_crosshairthickness": 1, "cl_crosshairgap": -1, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "shox", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1.5, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "FalleN", "game": "CS2", "cl_crosshairsize": 4, "cl_crosshairthickness": 1, "cl_crosshairgap": -1, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "coldzera", "game": "CS2", "cl_crosshairsize": 2.5, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#00ff00" },
+    { "name": "JKS", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -3, "cl_crosshairdot": 0, "color": "#00ff00" },
+    
+    { "name": "TenZ", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#ffffff" },
+    { "name": "aspas", "game": "Valorant", "inner_length": 3, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#00ffff" },
+    { "name": "Chronicle", "game": "Valorant", "inner_length": 4, "inner_thickness": 1, "inner_gap": 2, "show_dot": false, "color": "#ff00ff" },
+    { "name": "Boaster", "game": "Valorant", "inner_length": 2, "inner_thickness": 1, "inner_gap": 1, "show_dot": true, "color": "#00ff00" },
+    { "name": "Derke", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#00ffff" },
+    { "name": "yay", "game": "Valorant", "inner_length": 0, "inner_thickness": 0, "inner_gap": 0, "show_dot": true, "color": "#ff0000" },
+    { "name": "FNS", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#00ff00" },
+    { "name": "crashies", "game": "Valorant", "inner_length": 4, "inner_thickness": 1, "inner_gap": 2, "show_dot": false, "color": "#ffff00" },
+    { "name": "Victor", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 3, "show_dot": false, "color": "#00ff00" },
+    { "name": "cryocells", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#00ffff" },
+    { "name": "asuna", "game": "Valorant", "inner_length": 2, "inner_thickness": 1.5, "inner_gap": 1, "show_dot": false, "color": "#ffffff" },
+    { "name": "scump", "game": "Valorant", "inner_length": 3, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#ffff00" },
+    { "name": "shazham", "game": "Valorant", "inner_length": 5, "inner_thickness": 1, "inner_gap": 2, "show_dot": false, "color": "#00ff00" },
+    { "name": "sinatraa", "game": "Valorant", "inner_length": 3, "inner_thickness": 1, "inner_gap": 3, "show_dot": false, "color": "#00ff00" },
+    { "name": "Hiko", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 4, "show_dot": false, "color": "#00ff00" },
+    { "name": "ShahZaM", "game": "Valorant", "inner_length": 4, "inner_thickness": 1.5, "inner_gap": 2, "show_dot": false, "color": "#00ffff" }
+  ],
+  "gamePresets": [
+    { "name": "Warzone Center Dot", "game": "CoD", "app_size": 0, "app_thickness": 0, "app_gap": 0, "app_dot": true, "app_dot_size": 3, "color": "#ffff00", "description": "Perfekt für das Zentrieren beim Hüftfeuer." },
+    { "name": "Tactical Competitor", "game": "CoD", "app_size": 3, "app_thickness": 1, "app_gap": 5, "app_dot": false, "app_dot_size": 0, "color": "#ffffff", "description": "Maximale Sicht im stressigen Nahkampf." },
+    { "name": "The Box / Square", "game": "CoD", "app_size": 2, "app_thickness": 2, "app_gap": 2, "app_dot": false, "app_dot_size": 0, "color": "#00ff00", "description": "Rahmt Köpfe auf mittlere Distanz perfekt ein." },
+    { "name": "Shox Classic", "game": "CoD", "app_size": 2, "app_thickness": 1.5, "app_gap": 2, "app_dot": false, "app_dot_size": 0, "color": "#00ffff", "description": "Hebt sich stark von dunklen Texturen ab." },
+    
+    { "name": "Survival Minimal-Dot", "game": "Rust", "app_size": 0, "app_thickness": 0, "app_gap": 0, "app_dot": true, "app_dot_size": 1.5, "color": "#ff0000", "description": "Die absolute Meta für Bögen und den ersten AK-Schuss." },
+    { "name": "Shotgun Spread Circle", "game": "Rust", "app_size": 4, "app_thickness": 1, "app_gap": 8, "app_dot": false, "app_dot_size": 0, "color": "#ffffff", "description": "Visualisiert exakt die Streuung von Schrotflinten." },
+    { "name": "Eoka Holosight Fix", "game": "Rust", "app_size": 1, "app_thickness": 1, "app_gap": 6, "app_dot": true, "app_dot_size": 2, "color": "#ffff00", "description": "Gleicht ungenaue Visiere im Early-Game aus." },
+    { "name": "Beamer Cross", "game": "Rust", "app_size": 8, "app_thickness": 1, "app_gap": 1, "app_dot": false, "app_dot_size": 0, "color": "#00ff00", "description": "Hilft massiv bei der Recoil-Kontrolle auf Distanz." },
+    
+    { "name": "Distanz T-Shape", "game": "PUBG", "app_size": 4, "app_thickness": 1, "app_gap": 2, "app_dot": false, "app_dot_size": 0, "color": "#00ff00", "description": "Keine obere Linie – verhindert das Verdecken bei weiten Snipes." },
+    { "name": "The Circle-Dot", "game": "PUBG", "app_size": 2, "app_thickness": 1, "app_gap": 4, "app_dot": true, "app_dot_size": 2, "color": "#ff0000", "description": "Ideal für schnelles Soft-Aim direkt aus der Hüfte." },
+    { "name": "Classic Comp", "game": "PUBG", "app_size": 2.5, "app_thickness": 1.5, "app_gap": 1, "app_dot": false, "app_dot_size": 0, "color": "#ffffff", "description": "Das minimalistische Standard-Kreuz der Turnierspieler." },
+    { "name": "Holographic Arrow", "game": "PUBG", "app_size": 3, "app_thickness": 2, "app_gap": 0, "app_dot": false, "app_dot_size": 0, "color": "#ffff00", "description": "Pfeil-Optik für eine intuitive, klare Ziel-Zentrierung." },
+    
+    { "name": "Neon Pink Sweaty", "game": "Apex", "app_size": 1.5, "app_thickness": 2, "app_gap": 0, "app_dot": false, "app_dot_size": 0, "color": "#ff00ff", "description": "Pink geht im bunten Effekt-Gewitter niemals unter." },
+    { "name": "Tracking Circle", "game": "Apex", "app_size": 3, "app_thickness": 1.5, "app_gap": 5, "app_dot": false, "app_dot_size": 0, "color": "#00ffff", "description": "Hält den Gegner bei schnellem Movement perfekt im Fokus." },
+    { "name": "Wingman Elite Dot", "game": "Apex", "app_size": 0, "app_thickness": 0, "app_gap": 0, "app_dot": true, "app_dot_size": 2.5, "color": "#00ff00", "description": "Knackiger Punkt für präzise Headshots auf Distanz." },
+    { "name": "Trident Cross", "game": "Apex", "app_size": 4, "app_thickness": 1, "app_gap": 4, "app_dot": true, "app_dot_size": 2, "color": "#ffff00", "description": "Weit geöffnetes Kreuz – ideal für vollautomatische SMGs." }
+  ]
+}
