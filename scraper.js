@@ -18,69 +18,72 @@ function cleanName(name) {
 
 async function run() {
     try {
-        console.log("Starte stabilen HTML-Data-Scraper...");
-        const baseUrl = 'https://procrosshairs.com';
+        console.log("Starte TotalCSGO-Scraper...");
+        const mainUrl = 'https://totalcsgo.com/crosshairs';
         
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
         if (fs.existsSync(PRESETS_PATH)) {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
-        // 1. Spieler-Links von der Hauptseite holen
-        const mainPage = await axios.get(baseUrl, httpOptions);
+        // 1. Hauptseite laden und Spieler-Links einsammeln
+        const mainPage = await axios.get(mainUrl, httpOptions);
         const $ = cheerio.load(mainPage.data);
         const playerUrls = [];
 
-        $('a[href*="/player/"]').each((i, el) => {
+        // TotalCSGO listet die Pros in Links auf, die mit /crosshairs/ beginnen
+        $('a[href*="/crosshairs/"]').each((i, el) => {
             const href = $(el).attr('href');
-            if (href && !href.includes('/valorant/')) {
-                const fullUrl = href.startsWith('http') ? href : baseUrl + href;
-                if (!playerUrls.includes(fullUrl) && playerUrls.length < 40) {
+            if (href) {
+                const fullUrl = href.startsWith('http') ? href : 'https://totalcsgo.com' + href;
+                // Duplikate und die Hauptseite selbst filtern
+                if (!playerUrls.includes(fullUrl) && fullUrl !== 'https://totalcsgo.com/crosshairs' && playerUrls.length < 40) {
                     playerUrls.push(fullUrl);
                 }
             }
         });
-        console.log(`Gefundene Spieler-Seiten: ${playerUrls.length}`);
 
-        // 2. Jede Profilseite parsen
+        console.log(`Gefundene Spieler auf TotalCSGO: ${playerUrls.length}`);
+
+        // 2. Spieler-Unterseiten abklappern
         for (const url of playerUrls) {
             const urlChunks = url.split('/');
             const playerSlug = urlChunks[urlChunks.length - 1] || "Unknown";
             
             try {
                 const profilePage = await axios.get(url, httpOptions);
+                const p$ = cheerio.load(profilePage.data);
                 const html = profilePage.data;
 
-                // --- DER UNFEHLBARE REGEX-GREIFER ---
-                // Sucht direkt nach den Datenfeldern im HTML-Quelltext
-                const sizeMatch = html.match(/"cl_crosshairsize"\s*:\s*"?([0-9.-]+)"?/i);
-                const thicknessMatch = html.match(/"cl_crosshairthickness"\s*:\s*"?([0-9.-]+)"?/i);
-                const gapMatch = html.match(/"cl_crosshairgap"\s*:\s*"?([0-9.-]+)"?/i);
-                const dotMatch = html.match(/"cl_crosshairdot"\s*:\s*"?([0-1]+)"?/i);
+                // --- 1. SHARE-CODE EXTRAKTION ---
+                // Sucht nach dem typischen CSGO-XXXXX Code im HTML-Text
                 const shareCodeMatch = html.match(/(CSGO-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5})/i);
-
-                // Farb-RGB-Werte im HTML suchen
-                const rMatch = html.match(/"cl_crosshaircolor_r"\s*:\s*"?([0-9]+)"?/i);
-                const gMatch = html.match(/"cl_crosshaircolor_g"\s*:\s*"?([0-9]+)"?/i);
-                const bMatch = html.match(/"cl_crosshaircolor_b"\s*:\s*"?([0-9]+)"?/i);
-
-                // Fallback-Farbe (Grün) berechnen, falls kein RGB gefunden wird
-                let colorHex = "#00ff00";
-                if (rMatch && gMatch && bMatch) {
-                    const toHex = (c) => String("0" + parseInt(c).toString(16)).slice(-2);
-                    colorHex = `#${toHex(rMatch[1])}${toHex(gMatch[1])}${toHex(bMatch[1])}`;
-                }
-
-                // Werte extrahieren oder Standardwerte setzen
-                const size = sizeMatch ? parseFloat(sizeMatch[1]) : 2;
-                const thickness = thicknessMatch ? parseFloat(thicknessMatch[1]) : 1;
-                const gap = gapMatch ? parseFloat(gapMatch[1]) : -2;
-                const dot = dotMatch ? parseInt(dotMatch[1]) : 0;
                 const shareCode = shareCodeMatch ? shareCodeMatch[1] : "";
 
+                // --- 2. EINZELWERTE AUS DEN CODES EXTRAHIEREN ---
+                // TotalCSGO packt die Konsolenbefehle oft in <code> oder <pre> Tags oder direkt in den Fließtext
+                const extractValue = (regex, defaultVal) => {
+                    const match = html.match(regex);
+                    return match ? parseFloat(match[1]) : defaultVal;
+                };
+
+                const size = extractValue(/cl_crosshairsize\s+["']?([0-9.-]+)["']?/i, 2);
+                const thickness = extractValue(/cl_crosshairthickness\s+["']?([0-9.-]+)["']?/i, 1);
+                const gap = extractValue(/cl_crosshairgap\s+["']?([0-9.-]+)["']?/i, -2);
+                const dot = extractValue(/cl_crosshairdot\s+["']?([0-1]+)["']?/i, 0);
+
+                // RGB Farben extrahieren
+                const r = extractValue(/cl_crosshaircolor_r\s+([0-9]+)/i, 0);
+                const g = extractValue(/cl_crosshaircolor_g\s+([0-9]+)/i, 255);
+                const b = extractValue(/cl_crosshaircolor_b\s+([0-9]+)/i, 0);
+                
+                const toHex = (c) => String("0" + Math.min(255, Math.max(0, c)).toString(16)).slice(-2);
+                const colorHex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+
+                // Datensatz für presets.json vorbereiten
                 let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(playerSlug) && p.game === "CS2");
                 const finalData = {
-                    name: playerSlug,
+                    name: playerSlug.charAt(0).toUpperCase() + playerSlug.slice(1), // Schöner Name mit Großbuchstabe
                     game: "CS2",
                     cl_crosshairsize: size,
                     cl_crosshairthickness: thickness,
@@ -96,20 +99,22 @@ async function run() {
                     presets.pros.push(finalData);
                 }
 
-                console.log(`[Erfolg] ${playerSlug} -> Gap: ${gap} | Size: ${size} | Color: ${colorHex}`);
+                console.log(`[Erfolg] ${finalData.name} -> Gap: ${gap} | Size: ${size} | Color: ${colorHex} | Code: ${shareCode ? "Ja" : "Nein"}`);
                 
-                await delay(1500); // 1.5 Sek Pause
+                // Kurze Pause gegen Rate-Limits
+                await delay(1500);
             } catch (e) {
-                console.error(`[Fehler] Konnte Profil von ${playerSlug} nicht auslesen:`, e.message);
+                console.error(`[Fehler] Konnte ${playerSlug} nicht parsen:`, e.message);
             }
         }
 
+        // Speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nScraping erfolgreich beendet! presets.json ist befüllt.");
+        console.log("\nAbsolut perfekt! presets.json wurde über TotalCSGO aktualisiert.");
 
     } catch (error) {
-        console.error("Kritischer Fehler im Hauptablauf:", error.message);
+        console.error("Kritischer Fehler im Scraper:", error.message);
     }
 }
 
