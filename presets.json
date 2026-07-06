@@ -10,16 +10,16 @@
       "cl_crosshairdot": 0,
       "color": "#00ff00",
       "share_code": "CSGO-UseJt-3oTvn-47wPX-hEyER-WZfiK"
-    },
+    },[
     {
-      "name": "Zywoo",
-      "game": "CS2",
-      "share_code": "CSGO-KDOkV-jUpoE-GdhAh-YzbZL-MYXTB",
-      "cl_crosshairsize": 1.5,
-      "cl_crosshairthickness": 0.5,
-      "cl_crosshairgap": -2.2,
-      "cl_crosshairdot": 0,
-      "color": "#00ff00"
+    "name": "Zywoo",
+    "config": {
+        "cl_crosshairsize": 1.5,
+        "cl_crosshairthickness": 0.5,
+        "cl_crosshairgap": -3,
+        "cl_crosshairdot": 0
+    },
+    "image_url": "https://static.totalcsgo.com/crosshair_12345.png"
     },
     {
       "name": "Niko",
