@@ -38,7 +38,7 @@ function parseCS2Config(configStr) {
     };
 }
 
-// Regex-Parser für Valorant Konsolen-Strings (Profil-Strings)
+// Regex-Parser für Valorant Konsolen-Strings
 function parseValorantConfig(configStr) {
     const lengthMatch = configStr.match(/0l;([0-9.-]+)/);
     const thicknessMatch = configStr.match(/0t;([0-9.-]+)/);
@@ -46,7 +46,6 @@ function parseValorantConfig(configStr) {
     const dotMatch = configStr.match(/d;([0-1])/);
     const colorIdMatch = configStr.match(/c;([0-9]+)/);
 
-    // Grobe Farbzuordnung für Valorant Standardfarben (0=Weiß, 1=Grün, 2=Gelbgrün, 3=Grüngelb, 4=Gelb, 5=Cyan, 6=Pink, 7=Rot)
     const colorMap = { "0": "#ffffff", "1": "#00ff00", "4": "#ffff00", "5": "#00ffff", "6": "#ff00ff", "7": "#ff0000" };
     const colorHex = colorIdMatch ? (colorMap[colorIdMatch[1]] || "#00ff00") : "#00ff00";
 
@@ -64,103 +63,131 @@ async function run() {
         console.log("Starte Fadenkreuz-Scraper...");
         const baseUrl = 'https://procrosshairs.com';
         
-        // 1. URLs holen
         const cs2Urls = [];
         const valUrls = [];
 
-        // CS2 Hauptseite laden
+        // 1. Links für die ersten 20 CS2 Profis sammeln
+        console.log("Lese CS2 Übersichtsseite ein...");
         const htmlCS2 = await axios.get(baseUrl);
         let $ = cheerio.load(htmlCS2.data);
         $('a[href*="/player/cs2/"]').each((i, el) => {
             if (cs2Urls.length < 20) {
                 const href = $(el).attr('href');
-                if (!cs2Urls.includes(baseUrl + href)) cs2Urls.push(baseUrl + href);
+                const fullUrl = href.startsWith('http') ? href : baseUrl + href;
+                if (!cs2Urls.includes(fullUrl)) cs2Urls.push(fullUrl);
             }
         });
 
-        // Valorant Unterseite laden
+        // 2. Links für die ersten 20 Valorant Profis sammeln
+        console.log("Lese Valorant Übersichtsseite ein...");
         const htmlVal = await axios.get(`${baseUrl}/valorant`);
         $ = cheerio.load(htmlVal.data);
         $('a[href*="/player/valorant/"]').each((i, el) => {
             if (valUrls.length < 20) {
                 const href = $(el).attr('href');
-                if (!valUrls.includes(baseUrl + href)) valUrls.push(baseUrl + href);
+                const fullUrl = href.startsWith('http') ? href : baseUrl + href;
+                if (!valUrls.includes(fullUrl)) valUrls.push(fullUrl);
             }
         });
 
         console.log(`Gefunden: ${cs2Urls.length} CS2 Profile und ${valUrls.length} Valorant Profile.`);
 
-        // 2. Bestehende Presets laden
+        // 3. Bestehende presets.json laden
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
         if (fs.existsSync(PRESETS_PATH)) {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
-        const updatedPros = [];
+        // Hilfsliste, um alle aktuell verarbeiteten Spieler-Namen im Auge zu behalten
+        const activeScrapedNames = [];
 
-        // 3. CS2 Profile abfragen
+        // 4. CS2 Profile nacheinander abfragen
         for (const url of cs2Urls) {
             try {
-                console.log(`Lade CS2 Profil: ${url}`);
+                const urlName = url.split('/').pop();
+                console.log(`Verarbeite CS2 Profil von: ${urlName}`);
+                
                 const profilePage = await axios.get(url);
                 const $p = cheerio.load(profilePage.data);
                 
-                const name = url.split('/').pop();
-                // Holt die Werte aus den beiden Input-Feldern/Copy-Containern der Seite
                 const shareCode = $p('input, textarea').eq(0).val() || "";
                 const consoleString = $p('input, textarea').eq(1).val() || "";
 
-                if (shareCode.startsWith("CSGO-")) {
+                if (shareCode) {
                     const parsedData = parseCS2Config(consoleString);
-                    updatedPros.push({
-                        name: name.charAt(0).toUpperCase() + name.slice(1),
-                        game: "CS2",
-                        ...parsedData,
-                        share_code: shareCode
-                    });
+                    const displayName = urlName.charAt(0).toUpperCase() + urlName.slice(1);
+                    activeScrapedNames.push(displayName.toLowerCase());
+
+                    // CASE-INSENSITIVE ABGLEICH: Findet "NiKo" unabhängig von "niko"
+                    let existingPro = presets.pros.find(p => p.name.toLowerCase() === displayName.toLowerCase() && p.game === "CS2");
+
+                    if (existingPro) {
+                        // Aktualisiere Werte, behalte aber das exakte Namens-Casing aus der JSON
+                        Object.assign(existingPro, parsedData);
+                        existingPro.share_code = shareCode;
+                    } else {
+                        // Neu hinzufügen, falls noch nicht im System
+                        presets.pros.push({
+                            name: displayName,
+                            game: "CS2",
+                            ...parsedData,
+                            share_code: shareCode
+                        });
+                    }
                 }
-                await delay(5000); // 5 Sekunden Pause
+                await delay(5000); // Fair-Use 5 Sekunden Zwangspause
             } catch (err) {
-                console.error(`Fehler bei URL ${url}:`, err.message);
+                console.error(`Fehler bei CS2 URL ${url}:`, err.message);
             }
         }
 
-        // 4. Valorant Profile abfragen
+        // 5. Valorant Profile nacheinander abfragen
         for (const url of valUrls) {
             try {
-                console.log(`Lade Valorant Profil: ${url}`);
+                const urlName = url.split('/').pop();
+                console.log(`Verarbeite Valorant Profil von: ${urlName}`);
+                
                 const profilePage = await axios.get(url);
                 const $p = cheerio.load(profilePage.data);
                 
-                const name = url.split('/').pop();
                 const shareCode = $p('input, textarea').eq(0).val() || "";
                 const consoleString = $p('input, textarea').eq(1).val() || "";
 
                 if (shareCode) {
                     const parsedData = parseValorantConfig(consoleString);
-                    updatedPros.push({
-                        name: name.charAt(0).toUpperCase() + name.slice(1),
-                        game: "Valorant",
-                        ...parsedData,
-                        share_code: shareCode
-                    });
+                    const displayName = urlName.charAt(0).toUpperCase() + urlName.slice(1);
+                    activeScrapedNames.push(displayName.toLowerCase());
+
+                    // CASE-INSENSITIVE ABGLEICH
+                    let existingPro = presets.pros.find(p => p.name.toLowerCase() === displayName.toLowerCase() && p.game === "Valorant");
+
+                    if (existingPro) {
+                        Object.assign(existingPro, parsedData);
+                        existingPro.share_code = shareCode;
+                    } else {
+                        presets.pros.push({
+                            name: displayName,
+                            game: "Valorant",
+                            ...parsedData,
+                            share_code: shareCode
+                        });
+                    }
                 }
-                await delay(5000); // 5 Sekunden Pause
+                await delay(5000); // Fair-Use 5 Sekunden Zwangspause
             } catch (err) {
-                console.error(`Fehler bei URL ${url}:`, err.message);
+                console.error(`Fehler bei Valorant URL ${url}:`, err.message);
             }
         }
 
-        // 5. Presets-Datei aktualisieren
-        if (updatedPros.length > 0) {
-            presets.pros = updatedPros;
-            presets.lastUpdated = new Date().toLocaleDateString('de-DE');
-            fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-            console.log("presets.json erfolgreich aktualisiert!");
-        }
+        // 6. JSON speichern und verifizieren
+        presets.lastUpdated = new Date().toLocaleDateString('de-DE');
+        
+        // Formatiert speichern (2er-Einrückung)
+        fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
+        console.log(`Scraping beendet! presets.json erfolgreich aktualisiert am ${presets.lastUpdated}.`);
 
     } catch (error) {
-        console.error("Globaler Scraper-Fehler:", error);
+        console.error("Kritischer globaler Fehler im Scraper:", error);
     }
 }
 
