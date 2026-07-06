@@ -1,33 +1,23 @@
 name: Auto Update Pro Crosshairs
-
 on:
   schedule:
-    - cron: '0 4 * * *' # Jeden Morgen um 04:00 UTC
-  workflow_dispatch: # Ermöglicht manuellen Start per Klick auf GitHub
+    - cron: '0 4 * * *'
+  workflow_dispatch:
 
 jobs:
   update-json:
     runs-on: ubuntu-latest
-
+    container:
+      image: ghcr.io/puppeteer/puppeteer:latest
+      options: --user root
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24 # Direkt auf die aktuelle Version angehoben
-
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2t64
-          npm install puppeteer
-
-      - name: Run Scraper Script
+      - name: Run Scraper
         run: node scraper.js
 
-      - name: Commit and Push Changes
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -35,6 +25,4 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: auto-update pro crosshairs [skip ci]"
             git push
-          else
-            echo "Keine Änderungen an den Crosshairs festgestellt."
           fi
