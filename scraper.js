@@ -9,39 +9,47 @@ const httpOptions = {
 
 async function run() {
     try {
-        console.log("--- STRUKTUR-ANALYSE START ---");
+        console.log("--- ECHTER HTML-CHECK START ---");
         const baseUrl = 'https://procrosshairs.com';
         
-        const responseCS2 = await axios.get(baseUrl, httpOptions);
-        const $cs2 = cheerio.load(responseCS2.data);
+        const response = await axios.get(baseUrl, httpOptions);
+        const $ = cheerio.load(response.data);
         
-        const nextDataText = $cs2('#__NEXT_DATA__').html();
-        if (!nextDataText) {
-            console.log("Fehler: Kein __NEXT_DATA__ Element gefunden.");
-            return;
-        }
+        // 1. Welche Scripts gibt es überhaupt?
+        console.log("\n--- Vorhandene Script-Tags ---");
+        $('script').each((i, el) => {
+            const src = $(el).attr('src');
+            const id = $(el).attr('id');
+            if (src) {
+                console.log(`Script ${i}: src="${src}"`);
+            } else if (id) {
+                console.log(`Script ${i}: id="${id}"`);
+            } else {
+                const text = $(el).html() || "";
+                console.log(`Script ${i}: Inlinescript (Länge: ${text.length} Zeichen)`);
+                if (text.includes('player') || text.includes('crosshair')) {
+                    console.log(`   -> Enthält verdächtigen Text: ${text.substring(0, 150)}...`);
+                }
+            }
+        });
 
-        const nextData = JSON.parse(nextDataText);
-        const pageProps = nextData.props?.pageProps || {};
-        
-        const playersList = pageProps.players || pageProps.initialPlayers || Object.values(pageProps).find(val => Array.isArray(val)) || [];
-        
-        console.log(`\nGesamtanzahl gefundener Spieler im JSON: ${playersList.length}`);
-        
-        if (playersList.length > 0) {
-            // Wir suchen gezielt nach ZywOo oder nehmen den ersten Eintrag
-            const testPlayer = playersList.find(p => p?.name?.toLowerCase().includes('zywoo')) || playersList[0];
+        // 2. Wie sehen die Spieler-Elemente im HTML aus?
+        console.log("\n--- Suche nach Spieler-Karten/Elementen ---");
+        // Wir suchen nach Links oder Elementen, die das Wort "player" im Text oder Attribut haben
+        $('[class*="player"], [id*="player"], a').each((i, el) => {
+            const text = $(el).text().trim();
+            const attrs = el.attribs;
             
-            console.log("\n================ ECHTE SPIELER-STRUKTUR IM HINTERGRUND ================");
-            console.log(JSON.stringify(testPlayer, null, 2));
-            console.log("=======================================================================\n");
-        } else {
-            console.log("Keine Spieler-Arrays in pageProps gefunden.");
-            console.log("Verfügbare Keys in pageProps:", Object.keys(pageProps));
-        }
+            if (text.toLowerCase().includes('donk') || text.toLowerCase().includes('zywoo')) {
+                console.log(`Gefundenes Element für Pro-Spieler:`);
+                console.log(`Tag: <${el.name}>, Text: "${text}"`);
+                console.log(`Attribute:`, JSON.stringify(attrs, null, 2));
+                console.log("-----------------------------------------");
+            }
+        });
 
     } catch (error) {
-        console.error("Fehler während der Analyse:", error.message);
+        console.error("Fehler beim HTML-Check:", error.message);
     }
 }
 
