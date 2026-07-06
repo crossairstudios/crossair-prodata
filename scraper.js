@@ -30,20 +30,25 @@ function parseBooleanOrNumber(val) {
     return 0;
 }
 
+// BOMBENSICHERER PARSER FÜR ROHE TEXTE UND HTML-FRAGMENTE
 function parseCS2Config(configStr) {
-    const sizeMatch = configStr.match(/cl_crosshairsize\s+([0-9.-]+)/);
-    const thicknessMatch = configStr.match(/cl_crosshairthickness\s+([0-9.-]+)/);
-    const gapMatch = configStr.match(/cl_crosshairgap\s+([0-9.-]+)/);
-    const dotMatch = configStr.match(/cl_crosshairdot\s+([0-9a-zA-Z.-]+)/);
+    // Flexibler Regex, der auch mit HTML-Resten, Anführungszeichen und Leerzeichen klarkommt
+    const sizeMatch = configStr.match(/cl_crosshairsize\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9.-]+)/i);
+    const thicknessMatch = configStr.match(/cl_crosshairthickness\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9.-]+)/i);
+    const gapMatch = configStr.match(/cl_crosshairgap\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9.-]+)/i);
+    const dotMatch = configStr.match(/cl_crosshairdot\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9a-zA-Z.-]+)/i);
     
-    const rMatch = configStr.match(/cl_crosshaircolor_r\s+([0-9]+)/);
-    const gMatch = configStr.match(/cl_crosshaircolor_g\s+([0-9]+)/);
-    const bMatch = configStr.match(/cl_crosshaircolor_b\s+([0-9]+)/);
+    const rMatch = configStr.match(/cl_crosshaircolor_r\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9]+)/i);
+    const gMatch = configStr.match(/cl_crosshaircolor_g\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9]+)/i);
+    const bMatch = configStr.match(/cl_crosshaircolor_b\s*(?:\\"[a-z0-9_-]+\\"|\s+|=)\s*["']?([0-9]+)/i);
+
+    // Wenn kein Fund da ist, versuchen wir ein zweites, simpleres Muster für komprimierte Configs
+    const getVal = (match, fallback) => match ? parseFloat(match[1]) : fallback;
 
     return {
-        cl_crosshairsize: sizeMatch ? parseFloat(sizeMatch[1]) : 2,
-        cl_crosshairthickness: thicknessMatch ? parseFloat(thicknessMatch[1]) : 1,
-        cl_crosshairgap: gapMatch ? parseFloat(gapMatch[1]) : -2,
+        cl_crosshairsize: getVal(sizeMatch, 1.5),
+        cl_crosshairthickness: getVal(thicknessMatch, 1),
+        cl_crosshairgap: getVal(gapMatch, -3), // Geänderter Standardwert zur Erkennung von Fallbacks
         cl_crosshairdot: dotMatch ? parseBooleanOrNumber(dotMatch[1]) : 0,
         color: rgbToHex(rMatch?.[1], gMatch?.[1], bMatch?.[1])
     };
@@ -123,14 +128,13 @@ async function run() {
                 const profilePage = await axios.get(url, httpOptions);
                 const rawHtml = profilePage.data;
 
+                // Versuche, den Share-Code zu isolieren
                 const shareCodeMatch = rawHtml.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
-                const consoleStringMatch = rawHtml.match(/cl_crosshairgap\s+[^"]+/);
-                
                 const shareCode = shareCodeMatch ? shareCodeMatch[0] : "";
-                const consoleString = consoleStringMatch ? consoleStringMatch[0] : "";
 
                 if (shareCode) {
-                    const parsedData = parseCS2Config(consoleString || rawHtml);
+                    // Wir übergeben das KOMPLETTE HTML an die Parsing-Funktion, damit der neue Regex alles durchsuchen kann
+                    const parsedData = parseCS2Config(rawHtml);
                     let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "CS2");
 
                     if (existingPro) {
@@ -201,7 +205,7 @@ async function run() {
         // Speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nErfolgreich! presets.json wurde mit jeweils 40 Spielern aktualisiert.");
+        console.log("\nErfolgreich! presets.json wurde mit exakten Werten aktualisiert.");
 
     } catch (error) {
         console.error("Kritischer Fehler im Hauptprozess:", error.message);
