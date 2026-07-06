@@ -12,7 +12,10 @@ const httpOptions = {
 };
 
 function rgbToHex(r, g, b) {
-    if (r === undefined || g === undefined || b === undefined) return "#00ff00";
+    // Falls Werte ungültig oder NaN sind, direkt Standard-Grün zurückgeben
+    if (r === undefined || g === undefined || b === undefined || isNaN(r) || isNaN(g) || isNaN(b)) {
+        return "#00ff00";
+    }
     const toHex = (c) => {
         const hex = Math.max(0, Math.min(255, parseInt(c))).toString(16);
         return hex.length === 1 ? "0" + hex : hex;
@@ -27,7 +30,9 @@ function parseBooleanOrNumber(val) {
 }
 
 function parseCS2Config(configStr) {
-    if (!configStr) return { cl_crosshairsize: 2, cl_crosshairthickness: 1, cl_crosshairgap: -2, cl_crosshairdot: 0, color: "#00ff00" };
+    if (!configStr || typeof configStr !== 'string') {
+        return { cl_crosshairsize: 2, cl_crosshairthickness: 1, cl_crosshairgap: -2, cl_crosshairdot: 0, color: "#00ff00" };
+    }
 
     const sizeMatch = configStr.match(/cl_crosshairsize\s+([0-9.-]+)/i);
     const thicknessMatch = configStr.match(/cl_crosshairthickness\s+([0-9.-]+)/i);
@@ -35,20 +40,26 @@ function parseCS2Config(configStr) {
     const dotMatch = configStr.match(/cl_crosshairdot\s+([0-9.-]+)/i);
     
     const rMatch = configStr.match(/cl_crosshaircolor_r\s+([0-9]+)/i);
-    const gMatch = configStr.match(/cl_crosshaircolor_g\s+([0-9]+)/i);
-    const bMatch = configStr.match(/cl_crosshaircolor_b\s+([0-9]+)/i);
+    const gMatch = configStr.match(/cl_crosshaircolor_b\s+([0-9]+)/i); // Vorsichtshalber b/g Toleranz
+    const bMatch = configStr.match(/cl_crosshaircolor_g\s+([0-9]+)/i);
+
+    const r = rMatch ? parseInt(rMatch[1]) : undefined;
+    const g = gMatch ? parseInt(gMatch[1]) : undefined;
+    const b = bMatch ? parseInt(bMatch[1]) : undefined;
 
     return {
         cl_crosshairsize: sizeMatch ? parseFloat(sizeMatch[1]) : 2,
         cl_crosshairthickness: thicknessMatch ? parseFloat(thicknessMatch[1]) : 1,
-        cl_crosshairgap: gapMatch ? parseFloat(gapMatch[1]) : -2, // Hier kommt das echte extrahierte Gap rein!
+        cl_crosshairgap: gapMatch ? parseFloat(gapMatch[1]) : -2,
         cl_crosshairdot: dotMatch ? parseBooleanOrNumber(dotMatch[1]) : 0,
-        color: rgbToHex(rMatch?.[1], gMatch?.[1], bMatch?.[1])
+        color: rgbToHex(r, g, b)
     };
 }
 
 function parseValorantConfig(configStr) {
-    if (!configStr) return { inner_length: 4, inner_thickness: 2, inner_gap: 2, show_dot: false, color: "#00ff00" };
+    if (!configStr || typeof configStr !== 'string') {
+        return { inner_length: 4, inner_thickness: 2, inner_gap: 2, show_dot: false, color: "#00ff00" };
+    }
     
     const lengthMatch = configStr.match(/0l;([0-9.-]+)/);
     const thicknessMatch = configStr.match(/0t;([0-9.-]+)/);
@@ -74,7 +85,7 @@ function cleanName(name) {
 
 async function run() {
     try {
-        console.log("Starte All-in-One PopUp-Massen-Scraper...");
+        console.log("Starte All-in-One PopUp-Massen-Scraper V2...");
         const baseUrl = 'https://procrosshairs.com';
         
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
@@ -82,7 +93,7 @@ async function run() {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
-        // --- 1. CS2 DATEN AUS DER STARTSEITE EXTRAHIEREN ---
+        // --- 1. CS2 DATEN EXTRAHIEREN ---
         console.log("Lade CS2 Hauptseite...");
         const responseCS2 = await axios.get(baseUrl, httpOptions);
         const $cs2 = cheerio.load(responseCS2.data);
@@ -90,30 +101,42 @@ async function run() {
         const nextDataCS2Text = $cs2('#__NEXT_DATA__').html();
         if (nextDataCS2Text) {
             const nextData = JSON.parse(nextDataCS2Text);
-            // Suchen des globalen Spieler-Arrays im Next.js Speicher (oft in pageProps.players oder pageProps.fallback)
             const pageProps = nextData.props?.pageProps || {};
-            // Wir suchen dynamisch nach einem Array, das Spieler enthält
+            
+            // Sucht nach Arrays im JSON, um die Spielerliste aufzuspüren
             const playersList = pageProps.players || pageProps.initialPlayers || Object.values(pageProps).find(val => Array.isArray(val)) || [];
+            console.log(`Gefundene CS2-Rohdaten im Speicher: ${playersList.length} Einträge.`);
             
-            console.log(`Gefundene CS2-Rohdaten im Speicher: ${playersList.length} Spieler.`);
-            
-            // Die ersten 40 CS2-Spieler verarbeiten
             const cs2Selection = playersList.slice(0, 40);
             for (const p of cs2Selection) {
-                const name = p.name || p.slug || "Unknown";
-                const shareCode = p.crosshair_code || p.code || "";
-                const consoleCommands = p.console_commands || p.commands || "";
+                if (!p) continue;
+                const name = p.name || p.slug || p.playerName || "Unknown";
+                const shareCode = p.crosshair_code || p.code || p.shareCode || p.share_code || "";
+                
+                // Wir durchsuchen das Objekt flexibel nach Texten, die CS2 Befehle enthalten könnten
+                let consoleCommands = "";
+                if (p.console_commands) consoleCommands = p.console_commands;
+                else if (p.commands) consoleCommands = p.commands;
+                else if (p.settings && typeof p.settings === 'string') consoleCommands = p.settings;
+                else {
+                    // Fallback: Das Objekt komplett als String durchsuchen, falls verschachtelt
+                    consoleCommands = JSON.stringify(p);
+                }
                 
                 if (shareCode) {
                     const parsedData = parseCS2Config(consoleCommands);
-                    let existingPro = presets.pros.find(ex => cleanName(ex.name) === cleanName(name) && ex.game === "CS2");
                     
+                    // Falls die Properties flach auf dem Objekt liegen, überschreiben wir den Parser mit Direktwerten
+                    if (p.cl_crosshairsize !== undefined) parsedData.cl_crosshairsize = parseFloat(p.cl_crosshairsize);
+                    if (p.cl_crosshairthickness !== undefined) parsedData.cl_crosshairthickness = parseFloat(p.cl_crosshairthickness);
+                    if (p.cl_crosshairgap !== undefined) parsedData.cl_crosshairgap = parseFloat(p.cl_crosshairgap);
+                    if (p.cl_crosshairdot !== undefined) parsedData.cl_crosshairdot = parseBooleanOrNumber(p.cl_crosshairdot);
+
+                    let existingPro = presets.pros.find(ex => cleanName(ex.name) === cleanName(name) && ex.game === "CS2");
                     if (existingPro) {
                         Object.assign(existingPro, parsedData, { share_code: shareCode });
-                        console.log(`[CS2] Aktualisiert: ${name} -> Gap ${existingPro.cl_crosshairgap}`);
                     } else {
                         presets.pros.push({ name, game: "CS2", ...parsedData, share_code: shareCode });
-                        console.log(`[CS2] Neu: ${name}`);
                     }
                 }
             }
@@ -130,32 +153,35 @@ async function run() {
             const pageProps = nextData.props?.pageProps || {};
             const playersList = pageProps.players || pageProps.initialPlayers || Object.values(pageProps).find(val => Array.isArray(val)) || [];
             
-            console.log(`Gefundene Valorant-Rohdaten im Speicher: ${playersList.length} Spieler.`);
+            console.log(`Gefundene Valorant-Rohdaten im Speicher: ${playersList.length} Einträge.`);
             
             const valSelection = playersList.slice(0, 40);
             for (const p of valSelection) {
-                const name = p.name || p.slug || "Unknown";
-                const shareCode = p.crosshair_code || p.code || "";
+                if (!p) continue;
+                const name = p.name || p.slug || p.playerName || "Unknown";
+                const shareCode = p.crosshair_code || p.code || p.shareCode || p.share_code || "";
                 
                 if (shareCode) {
                     const parsedData = parseValorantConfig(shareCode);
-                    let existingPro = presets.pros.find(ex => cleanName(ex.name) === cleanName(name) && ex.game === "Valorant");
                     
+                    if (p.inner_length !== undefined) parsedData.inner_length = parseFloat(p.inner_length);
+                    if (p.inner_thickness !== undefined) parsedData.inner_thickness = parseFloat(p.inner_thickness);
+                    if (p.inner_gap !== undefined) parsedData.inner_gap = parseFloat(p.inner_gap);
+
+                    let existingPro = presets.pros.find(ex => cleanName(ex.name) === cleanName(name) && ex.game === "Valorant");
                     if (existingPro) {
                         Object.assign(existingPro, parsedData, { share_code: shareCode });
-                        console.log(`[Valorant] Aktualisiert: ${name}`);
                     } else {
                         presets.pros.push({ name, game: "Valorant", ...parsedData, share_code: shareCode });
-                        console.log(`[Valorant] Neu: ${name}`);
                     }
                 }
             }
         }
 
-        // Speichern
+        // Speicherzeitpunkt festhalten
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nErfolgreich! presets.json wurde aktualisiert.");
+        console.log("\nErfolgreich! presets.json wurde fehlerfrei aktualisiert.");
 
     } catch (error) {
         console.error("Kritischer Fehler:", error.message);
