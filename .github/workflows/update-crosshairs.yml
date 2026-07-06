@@ -1,0 +1,40 @@
+name: Auto Update Pro Crosshairs
+
+on:
+  schedule:
+    - cron: '0 4 * * *' # Jeden Morgen um 04:00 UTC
+  workflow_dispatch: # Ermöglicht manuellen Start per Klick auf GitHub
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm init -y
+          npm install axios cheerio
+
+      - name: Run Scraper Script
+        run: node scraper.js
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add presets.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: auto-update pro crosshairs [skip ci]"
+            git push
+          else
+            echo "Keine Änderungen an den Crosshairs festgestellt."
+          fi
