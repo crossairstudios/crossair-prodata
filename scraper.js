@@ -1,20 +1,19 @@
-// scraper.js (Auszug für den Extraktions-Teil)
-async function scrapePlayer(url) {
-    const { data: html } = await axios.get(url);
-    const $ = cheerio.load(html);
+async function run() {
+    try {
+        console.log("Starte Scraping...");
+        const players = await scrapePlayer('https://totalcsgo.com/crosshairs');
+        
+        if (!players || players.length === 0) {
+            console.error("Fehler: Keine Spieler gefunden! Prüfe die CSS-Selektoren.");
+            return;
+        }
 
-    // 1. Logik-Werte (für "Anwenden"-Button)
-    const crosshairData = {
-        cl_crosshairsize: parseFloat($('input[name="cl_crosshairsize"]').val()),
-        cl_crosshairthickness: parseFloat($('input[name="cl_crosshairthickness"]').val()),
-        cl_crosshairgap: parseFloat($('input[name="cl_crosshairgap"]').val()),
-        cl_crosshairdot: parseInt($('input[name="cl_crosshairdot"]').val()),
-        // ... weitere Werte
-    };
-
-    // 2. Visuelle URL (für die Vorschau-Kachel)
-    // Wir suchen das Bild, das die Vorschau auf der Website darstellt
-    const imageUrl = $('img.crosshair-preview-image').attr('src') || null;
-
-    return { ...crosshairData, image_url: imageUrl };
+        const outputPath = './presets.json';
+        fs.writeFileSync(outputPath, JSON.stringify(players, null, 2));
+        
+        console.log(`Erfolg! Datei wurde aktualisiert unter: ${require('path').resolve(outputPath)}`);
+    } catch (err) {
+        console.error("Kritischer Fehler während des Workflows:", err);
+    }
 }
+run();
