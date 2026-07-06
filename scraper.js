@@ -49,93 +49,85 @@ function parseCS2Config(configStr) {
     };
 }
 
+function parseValorantConfig(configStr) {
+    const lengthMatch = configStr.match(/0l;([0-9.-]+)/);
+    const thicknessMatch = configStr.match(/0t;([0-9.-]+)/);
+    const gapMatch = configStr.match(/0o;([0-9.-]+)/);
+    const dotMatch = configStr.match(/d;([0-1]|true|false)/);
+    const colorIdMatch = configStr.match(/c;([0-9]+)/);
+
+    const colorMap = { "0": "#ffffff", "1": "#00ff00", "4": "#ffff00", "5": "#00ffff", "6": "#ff00ff", "7": "#ff0000" };
+    const colorHex = colorIdMatch ? (colorMap[colorIdMatch[1]] || "#00ff00") : "#00ff00";
+
+    return {
+        inner_length: lengthMatch ? parseFloat(lengthMatch[1]) : 4,
+        inner_thickness: thicknessMatch ? parseFloat(thicknessMatch[1]) : 2,
+        inner_gap: gapMatch ? parseFloat(gapMatch[1]) : 2,
+        show_dot: dotMatch ? (dotMatch[1] === "1" || dotMatch[1] === "true") : false,
+        color: colorHex
+    };
+}
+
 function cleanName(name) {
     return name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 async function run() {
     try {
-        console.log("Starte Debug-Hybrid-Scraper...");
+        console.log("Starte Top-40 Massen-Scraper (CS2 & Valorant)...");
         const baseUrl = 'https://procrosshairs.com';
         
         const cs2Urls = [];
+        const valUrls = [];
+
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
         if (fs.existsSync(PRESETS_PATH)) {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
+        // --- 1. CS2 LINKS SAMMELN ---
         console.log("Lade Hauptseite für CS2 Links...");
         const htmlCS2 = await axios.get(baseUrl, httpOptions);
         let $ = cheerio.load(htmlCS2.data);
-        
-        // Debug: Zeige alle gefundenen Links an
-        console.log(`Gesamtzahl aller Links auf der Startseite: ${$('a').length}`);
-
         $('a[href*="/player/"]').each((i, el) => {
             const href = $(el).attr('href');
-            if (href && (href.includes('/cs2/') || !href.includes('/valorant/'))) {
+            if (href && !href.includes('/valorant/')) {
                 const fullUrl = href.startsWith('http') ? href : baseUrl + href;
-                if (!cs2Urls.includes(fullUrl) && cs2Urls.length < 15) {
+                if (!cs2Urls.includes(fullUrl) && cs2Urls.length < 40) {
                     cs2Urls.push(fullUrl);
                 }
             }
         });
+        console.log(`Gefundene CS2 Spieler-URLs (${cs2Urls.length})`);
 
-        console.log(`Gefundene CS2 Spieler-URLs (${cs2Urls.length}):`, cs2Urls);
-
-        if (cs2Urls.length === 0) {
-            console.log("[Achtung] Keine URLs gefunden! Versuche alternativen Selektor...");
-            $('a').each((i, el) => {
-                const href = $(el).attr('href') || "";
-                if(href.includes('player')) {
-                     console.log(`Möglicher Treffer über Hauptselektor: ${href}`);
+        // --- 2. VALORANT LINKS SAMMELN ---
+        console.log("Lade Valorant-Übersicht für Valorant Links...");
+        const htmlVal = await axios.get(`${baseUrl}/valorant`, httpOptions);
+        $ = cheerio.load(htmlVal.data);
+        $('a[href*="/player/valorant/"]').each((i, el) => {
+            const href = $(el).attr('href');
+            if (href) {
+                const fullUrl = href.startsWith('http') ? href : baseUrl + href;
+                if (!valUrls.includes(fullUrl) && valUrls.length < 40) {
+                    valUrls.push(fullUrl);
                 }
-            });
-        }
+            }
+        });
+        console.log(`Gefundene Valorant Spieler-URLs (${valUrls.length})`);
 
-        // Schleife abfahren
+        // --- 3. CS2 INTERN PARSEN ---
         for (const url of cs2Urls) {
             const urlName = url.split('/').pop();
-            console.log(`\n--- Starte Analyse für: ${urlName} ---`);
-            console.log(`Lade URL: ${url}`);
-            
+            console.log(`[CS2] Analyse für: ${urlName}...`);
             try {
                 const profilePage = await axios.get(url, httpOptions);
-                const $p = cheerio.load(profilePage.data);
                 const rawHtml = profilePage.data;
 
-                let shareCode = "";
-                let consoleString = "";
-
-                // Versuch 1: Next.js JSON Speicher
-                const nextDataScript = $p('#__NEXT_DATA__').html();
-                if (nextDataScript) {
-                    console.log(`[INFO] __NEXT_DATA__ auf der Seite von ${urlName} gefunden.`);
-                    try {
-                        const nextData = JSON.parse(nextDataScript);
-                        const playerData = nextData.props?.pageProps?.player;
-                        if (playerData) {
-                            shareCode = playerData.crosshair_code || "";
-                            consoleString = playerData.console_commands || "";
-                            console.log(`[JSON-Erfolg] Code: ${shareCode}, Befehle gefunden.`);
-                        }
-                    } catch(e) {
-                        console.log("[JSON-Fehler] Konnte NEXT_DATA nicht parsen.");
-                    }
-                }
-
-                // Versuch 2: Regex-Fallback falls JSON leer war
-                if (!shareCode) {
-                    console.log("[Fallback] Suche über Text-Muster (Regex)...");
-                    const shareCodeMatch = rawHtml.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
-                    const consoleStringMatch = rawHtml.match(/cl_crosshairgap\s+[^"]+/);
-                    
-                    if (shareCodeMatch) {
-                        shareCode = shareCodeMatch[0];
-                        consoleString = consoleStringMatch ? consoleStringMatch[0] : "";
-                        console.log(`[Regex-Erfolg] Code im Text gefunden: ${shareCode}`);
-                    }
-                }
+                const shareCodeMatch = rawHtml.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
+                const consoleStringMatch = rawHtml.match(/cl_crosshairgap\s+[^"]+/);
+                
+                const shareCode = shareCodeMatch ? shareCodeMatch[0] : "";
+                const consoleString = consoleStringMatch ? consoleStringMatch[0] : "";
 
                 if (shareCode) {
                     const parsedData = parseCS2Config(consoleString || rawHtml);
@@ -148,7 +140,7 @@ async function run() {
                         existingPro.cl_crosshairdot = parsedData.cl_crosshairdot;
                         existingPro.color = parsedData.color;
                         existingPro.share_code = shareCode;
-                        console.log(`[AKTUALISIERT] ${existingPro.name} auf Gap ${existingPro.cl_crosshairgap} gesetzt.`);
+                        console.log(`   -> Aktualisiert: Gap ${existingPro.cl_crosshairgap}`);
                     } else {
                         const displayName = urlName.charAt(0).toUpperCase() + urlName.slice(1);
                         presets.pros.push({
@@ -157,24 +149,62 @@ async function run() {
                             ...parsedData,
                             share_code: shareCode
                         });
-                        console.log(`[NEU] ${displayName} hinzugefügt.`);
+                        console.log(`   -> Neu hinzugefügt.`);
                     }
-                } else {
-                    console.log(`[FEHLER] Absolut kein Share-Code für Spieler ${urlName} auffindbar.`);
                 }
-
-                await delay(4000);
+                await delay(3500);
             } catch(e) {
-                console.error(`Fehler beim Abruf von ${urlName}:`, e.message);
+                console.error(`Fehler bei CS2 Spieler ${urlName}:`, e.message);
             }
         }
 
+        // --- 4. VALORANT INTERN PARSEN ---
+        for (const url of valUrls) {
+            const urlName = url.split('/').pop();
+            console.log(`[Valorant] Analyse für: ${urlName}...`);
+            try {
+                const profilePage = await axios.get(url, httpOptions);
+                const rawHtml = profilePage.data;
+
+                const valCodeMatch = rawHtml.match(/0;P;[A-Za-z0-9;.-]+/);
+                const shareCode = valCodeMatch ? valCodeMatch[0] : "";
+
+                if (shareCode) {
+                    const parsedData = parseValorantConfig(shareCode);
+                    let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "Valorant");
+
+                    if (existingPro) {
+                        existingPro.inner_length = parsedData.inner_length;
+                        existingPro.inner_thickness = parsedData.inner_thickness;
+                        existingPro.inner_gap = parsedData.inner_gap;
+                        existingPro.show_dot = parsedData.show_dot;
+                        existingPro.color = parsedData.color;
+                        existingPro.share_code = shareCode;
+                        console.log(`   -> Aktualisiert.`);
+                    } else {
+                        const displayName = urlName.charAt(0).toUpperCase() + urlName.slice(1);
+                        presets.pros.push({
+                            name: displayName,
+                            game: "Valorant",
+                            ...parsedData,
+                            share_code: shareCode
+                        });
+                        console.log(`   -> Neu hinzugefügt.`);
+                    }
+                }
+                await delay(3500);
+            } catch(e) {
+                console.error(`Fehler bei Valorant Spieler ${urlName}:`, e.message);
+            }
+        }
+
+        // Speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nSpeichern in presets.json erfolgreich beendet.");
+        console.log("\nErfolgreich! presets.json wurde mit jeweils 40 Spielern aktualisiert.");
 
     } catch (error) {
-        console.error("Kritischer Fehler:", error.message);
+        console.error("Kritischer Fehler im Hauptprozess:", error.message);
     }
 }
 
