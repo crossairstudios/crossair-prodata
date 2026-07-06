@@ -12,69 +12,13 @@ const httpOptions = {
     }
 };
 
-// --- DIE OFFIZIELLE CS2 SHARE-CODE ENTSCHLÜSSELUNG ---
-const DICTIONARY = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-
-function decodeCS2ShareCode(code) {
-    const fallback = { cl_crosshairsize: 2, cl_crosshairthickness: 1, cl_crosshairgap: -2, cl_crosshairdot: 0, color: "#00ff00" };
-    try {
-        const cleanCode = code.replace(/CSGO-|-/g, '');
-        if (cleanCode.length !== 25) return fallback;
-
-        // 1. Base58 zu BigInt konvertieren
-        let num = 0n;
-        for (let i = 0; i < cleanCode.length; i++) {
-            const char = cleanCode[i];
-            const idx = DICTIONARY.indexOf(char);
-            if (idx === -1) return fallback;
-            num = num * 58n + BigInt(idx);
-        }
-
-        // 2. In 18 Bytes zerlegen
-        const bytes = [];
-        for (let i = 0; i < 18; i++) {
-            bytes.push(Number((num >> BigInt(i * 8)) & 0xFFn));
-        }
-
-        // 3. Bit-Parsing nach CS2-Protokoll-Struktur
-        // Size und Thickness liegen in den Bytes 3 und 4 (geteilt durch 10)
-        const size = bytes[3] / 10;
-        const thickness = bytes[4] / 10;
-
-        // Das Gap-Byte verwendet das Zweierkomplement für negative Zahlen (Offset 128)
-        let gapInt = bytes[5];
-        if (gapInt > 127) gapInt -= 256;
-        const gap = gapInt / 10;
-
-        // Dot ist das erste Bit im Byte 6
-        const dot = (bytes[6] & 1) ? 1 : 0;
-
-        // Farbe ermitteln (CS2 nutzt vordefinierte IDs oder RGB in späteren Bytes)
-        const colorId = bytes[2] & 7;
-        let colorHex = "#00ff00"; // Standard-Grün (ID 1)
-        if (colorId === 2) colorHex = "#ffff00"; // Gelb
-        if (colorId === 3) colorHex = "#0000ff"; // Blau
-        if (colorId === 4) colorHex = "#00ffff"; // Cyan
-        
-        return {
-            cl_crosshairsize: size,
-            cl_crosshairthickness: thickness,
-            cl_crosshairgap: gap,
-            cl_crosshairdot: dot,
-            color: colorHex
-        };
-    } catch (e) {
-        return fallback;
-    }
-}
-
 function cleanName(name) {
     return name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 async function run() {
     try {
-        console.log("Starte CS2-Protokoll-Decoder-Scraper...");
+        console.log("Starte fokussierten Share-Code Scraper...");
         const baseUrl = 'https://procrosshairs.com';
         
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
@@ -82,7 +26,7 @@ async function run() {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
-        // 1. URLs von Hauptseite holen
+        // 1. Alle Spieler-URLs von der Startseite sammeln
         const mainPage = await axios.get(baseUrl, httpOptions);
         const $ = cheerio.load(mainPage.data);
         const cs2Urls = [];
@@ -96,9 +40,9 @@ async function run() {
                 }
             }
         });
-        console.log(`Gefundene echte CS2 Spieler-URLs: ${cs2Urls.length}`);
+        console.log(`Gefundene CS2 Spieler-URLs: ${cs2Urls.length}`);
 
-        // 2. Seiten laden und Codes direkt decodieren
+        // 2. Spielerseiten besuchen und nur den Code extrahieren
         for (const url of cs2Urls) {
             const urlChunks = url.split('/');
             const urlName = urlChunks[urlChunks.length - 1] || "Unknown";
@@ -106,38 +50,53 @@ async function run() {
             try {
                 const profilePage = await axios.get(url, httpOptions);
                 
-                // Regex fischt den Share-Code aus dem HTML
+                // Sucht nach dem CSGO-Share-Code im rohen HTML
                 const shareCodeMatch = profilePage.data.match(/(CSGO-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5})/i);
                 
                 if (shareCodeMatch) {
                     const shareCode = shareCodeMatch[1];
-                    
-                    // Hier läuft die korrigierte CS2-Zweierkomplement-Berechnung
-                    const parsedData = decodeCS2ShareCode(shareCode);
 
                     let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "CS2");
+                    
+                    // Wir speichern nur den Namen, das Spiel und den Share-Code ab
+                    const proData = { 
+                        name: urlName, 
+                        game: "CS2", 
+                        share_code: shareCode 
+                    };
+
                     if (existingPro) {
-                        Object.assign(existingPro, parsedData, { share_code: shareCode });
+                        // Falls der Spieler existiert, überschreiben/behalten wir nur diese Basisdaten
+                        existingPro.share_code = shareCode;
+                        // Falls alte Einzelwerte (size, gap, etc.) in der JSON stören, 
+                        // löschen wir sie hier heraus, damit das JSON sauber bleibt:
+                        delete existingPro.cl_crosshairsize;
+                        delete existingPro.cl_crosshairthickness;
+                        delete existingPro.cl_crosshairgap;
+                        delete existingPro.cl_crosshairdot;
+                        delete existingPro.color;
                     } else {
-                        presets.pros.push({ name: urlName, game: "CS2", ...parsedData, share_code: shareCode });
+                        presets.pros.push(proData);
                     }
-                    console.log(`[Erfolg] ${urlName} -> Gap: ${parsedData.cl_crosshairgap} | Size: ${parsedData.cl_crosshairsize}`);
+                    console.log(`[Erfolg] ${urlName} -> Code: ${shareCode}`);
                 } else {
-                    console.log(`[Fehler] Kein Share-Code für ${urlName}`);
+                    console.log(`[Fehler] Kein Share-Code im HTML für ${urlName}`);
                 }
 
+                // 2 Sekunden Pause, um den Hoster nicht zu stressen
                 await delay(2000);
             } catch (e) {
                 console.error(`Fehler bei ${urlName}:`, e.message);
             }
         }
 
+        // Ergebnis speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nProzess erfolgreich beendet.");
+        console.log("\nErfolgreich! presets.json wurde mit aktuellen Share-Codes aktualisiert.");
 
     } catch (error) {
-        console.error("Kritischer Fehler:", error.message);
+        console.error("Kritischer Fehler im Ablauf:", error.message);
     }
 }
 
