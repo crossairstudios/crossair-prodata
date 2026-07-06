@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "6.7.2026, 09:05:43",
+  "lastUpdated": "6.7.2026, 09:09:39",
   "pros": [
     {
       "name": "S1mple",
@@ -930,6 +930,16 @@
       "cl_crosshairdot": 1,
       "color": "#00ff00",
       "share_code": "CSGO-Rz43V-NMBtM-Ea6dO-XGKZL-OmrqK"
+    },
+    {
+      "name": "Frontales",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-2R3RD-dBh8Z-mBZZU-yA5mE-bkMHA"
     }
   ],
   "gamePresets": [
