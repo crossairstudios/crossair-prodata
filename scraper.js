@@ -3,26 +3,32 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 
 async function scrapePlayer(url) {
-    console.log("Lade Seite...");
+    console.log("Lade Seite:", url);
     try {
-        const { data: html } = await axios.get(url);
+        // Procrosshairs nutzt teilweise dynamisches Rendering. 
+        // Falls axios allein nicht reicht, müsste man später auf Playwright/Puppeteer umsteigen.
+        // Für den Anfang versuchen wir es mit axios + cheerio:
+        const { data: html } = await axios.get(url, {
+            headers: { 'User-Agent': 'Mozilla/5.0' } // Wichtig, um nicht blockiert zu werden
+        });
         const $ = cheerio.load(html);
         const players = [];
 
-        // Wir iterieren über jeden Spieler-Container
-        $('.container').each((i, el) => {
-            const name = $(el).find('.player-name').text().trim();
-            const imageUrl = $(el).find('.crosshair').attr('src');
-            const code = $(el).find('.crosshair-code').attr('data-copy');
+        // Wir iterieren über die <li>-Elemente, die wir analysiert haben
+        $('li[role="button"]').each((i, el) => {
+            const name = $(el).find('h2 a').text().trim();
+            const imageUrl = $(el).find('img').attr('src');
+            
+            // Code aus dem alt-Attribut ziehen
+            const altText = $(el).find('img').attr('alt') || "";
+            const code = altText.split(': ')[1] || "";
 
-            // FILTER: 
-            // 1. Nur gültige Daten (name, imageUrl, code müssen vorhanden sein)
-            // 2. Filtert den "Global-Header" durch Längenbegrenzung des Namens
-            if (name && name.length < 30 && imageUrl && code) {
+            if (name && imageUrl && code) {
                 players.push({ 
                     name: name, 
                     imageUrl: imageUrl, 
-                    code: code 
+                    code: code,
+                    game: "CS2"
                 });
             }
         });
@@ -35,15 +41,16 @@ async function scrapePlayer(url) {
 }
 
 async function run() {
-    console.log("Starte Scraping...");
-    const players = await scrapePlayer('https://totalcsgo.com/crosshairs');
+    console.log("Starte Scraping für ProCrosshairs...");
+    // Hier kannst du die URL jetzt einfach anpassen
+    const players = await scrapePlayer('https://procrosshairs.com/');
     
     if (players.length === 0) {
-        console.warn("Warnung: Keine Spieler gefunden. Prüfe die CSS-Klassen!");
+        console.warn("Warnung: Keine Spieler gefunden. Prüfe die Selektoren oder die Seite.");
     } else {
         const outputPath = './presets.json';
         fs.writeFileSync(outputPath, JSON.stringify(players, null, 2));
-        console.log(`Erfolg! ${players.length} Spieler wurden in ${outputPath} gespeichert.`);
+        console.log(`Erfolg! ${players.length} Presets wurden in ${outputPath} gespeichert.`);
     }
 }
 
