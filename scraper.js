@@ -18,15 +18,19 @@ function cleanName(name) {
 
 async function run() {
     try {
-        console.log("Starte TotalCSGO-Scraper (bereinigt)...");
+        console.log("Starte TotalCSGO-Scraper (Vollversion)...");
         const mainUrl = 'https://totalcsgo.com/crosshairs';
         
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
         if (fs.existsSync(PRESETS_PATH)) {
-            presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
+            try {
+                presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
+            } catch (e) {
+                console.log("[Info] presets.json war fehlerhaft oder leer, erstelle neu.");
+            }
         }
 
-        // 1. Hauptseite laden
+        // 1. Hauptseite laden und Spieler-Links sammeln
         const mainPage = await axios.get(mainUrl, httpOptions);
         const $ = cheerio.load(mainPage.data);
         const playerUrls = [];
@@ -38,7 +42,7 @@ async function run() {
                 const urlChunks = fullUrl.split('/');
                 const playerSlug = urlChunks[urlChunks.length - 1] || "";
 
-                // FILTER: Keine Duplikate, nicht die Hauptseite UND nicht den Generator mitnehmen!
+                // FILTER: Keine Duplikate, nicht die Hauptseite UND nicht den Generator mitnehmen
                 if (
                     !playerUrls.includes(fullUrl) && 
                     fullUrl !== 'https://totalcsgo.com/crosshairs' && 
@@ -65,25 +69,38 @@ async function run() {
                 const shareCodeMatch = html.match(/(CSGO-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5})/i);
                 const shareCode = shareCodeMatch ? shareCodeMatch[1] : "";
 
-                // Einzelwerte via Regex parsen
+                // --- BULLETPROOF TEXT PARSER ---
                 const extractValue = (regex, defaultVal) => {
                     const match = html.match(regex);
                     return match ? parseFloat(match[1]) : defaultVal;
                 };
 
+                // Erkennt Werte nun exakt, egal ob mit Leerzeichen oder Semikolon umgeben
                 const size = extractValue(/cl_crosshairsize\s+["']?([0-9.-]+)["']?/i, 2);
                 const thickness = extractValue(/cl_crosshairthickness\s+["']?([0-9.-]+)["']?/i, 1);
                 const gap = extractValue(/cl_crosshairgap\s+["']?([0-9.-]+)["']?/i, -2);
                 const dot = extractValue(/cl_crosshairdot\s+["']?([0-1]+)["']?/i, 0);
+                const colorId = extractValue(/cl_crosshaircolor\s+["']?([0-9]+)["']?/i, 1);
 
                 // RGB Farben extrahieren
-                const r = extractValue(/cl_crosshaircolor_r\s+([0-9]+)/i, 0);
-                const g = extractValue(/cl_crosshaircolor_g\s+([0-9]+)/i, 255);
-                const b = extractValue(/cl_crosshaircolor_b\s+([0-9]+)/i, 0);
-                
-                const toHex = (c) => String("0" + Math.min(255, Math.max(0, c)).toString(16)).slice(-2);
-                const colorHex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+                let r = extractValue(/cl_crosshaircolor_r\s+([0-9]+)/i, null);
+                let g = extractValue(/cl_crosshaircolor_g\s+([0-9]+)/i, null);
+                let b = extractValue(/cl_crosshaircolor_b\s+([0-9]+)/i, null);
 
+                // Valve Farb-IDs auflösen, falls keine expliziten RGB-Werte da sind
+                let colorHex = "#00ff00"; // Standard Klassisch Grün (ID 1)
+                if (r !== null && g !== null && b !== null) {
+                    const toHex = (c) => String("0" + Math.min(255, Math.max(0, c)).toString(16)).slice(-2);
+                    colorHex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+                } else {
+                    // Fallbacks basierend auf der cl_crosshaircolor ID (z.B. für ZywOo)
+                    if (colorId === 2) colorHex = "#ffff00"; // Gelb
+                    if (colorId === 3) colorHex = "#0000ff"; // Blau
+                    if (colorId === 4) colorHex = "#00ffff"; // Cyan
+                    if (colorId === 5) colorHex = "#00ff00"; // Häufig von Pros für Standard-Grün genutzt
+                }
+
+                // Datensatz in das Array mappen
                 let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(playerSlug) && p.game === "CS2");
                 const finalData = {
                     name: playerSlug.charAt(0).toUpperCase() + playerSlug.slice(1),
@@ -102,21 +119,22 @@ async function run() {
                     presets.pros.push(finalData);
                 }
 
-                console.log(`[Erfolg] ${finalData.name} -> Gap: ${gap} | Size: ${size} | Color: ${colorHex}`);
+                console.log(`[Erfolg] ${finalData.name} -> Gap: ${gap} | Size: ${size} | Thickness: ${thickness} | Color: ${colorHex}`);
                 
+                // 1.5 Sekunden Pause um die Zielseite nicht zu DDOSen (Rate-Limits verhindern)
                 await delay(1500);
             } catch (e) {
-                console.error(`[Fehler] Konnte ${playerSlug} nicht parsen:`, e.message);
+                console.error(`[Fehler] Konnte Spieler "${playerSlug}" nicht parsen:`, e.message);
             }
         }
 
-        // Speichern
+        // Ergebnis speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nAbsolut perfekt! presets.json wurde ohne Generator-Eintrag aktualisiert.");
+        console.log("\nAbsolut perfekt! Die presets.json wurde erfolgreich aktualisiert.");
 
     } catch (error) {
-        console.error("Kritischer Fehler im Scraper:", error.message);
+        console.error("Kritischer Fehler im Hauptablauf des Scrapers:", error.message);
     }
 }
 
