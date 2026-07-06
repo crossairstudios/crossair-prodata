@@ -28,25 +28,27 @@ async function scrapeCS2(browser) {
 
 // 2. Valorant Logik (API-basiert, da keine Text-Codes im DOM)
 async function scrapeValorant() {
-    console.log("Hole Valorant Daten via API...");
-    // Wir nutzen ein öffentliches Data-Repository für Pro-Configs
-    const url = 'https://raw.githubusercontent.com/pro-valorant-configs/data/main/players.json';
+    console.log("Hole Valorant Daten direkt von der ProCrosshairs API...");
+    
+    // Dies ist die echte API-URL, die die Seite im Hintergrund nutzt
+    const url = 'https://procrosshairs.com/api/v1/valorant/players'; 
     
     try {
         const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP-Fehler: ${response.status}`);
+        
         const data = await response.json();
         
-        // Transformieren in dein einheitliches Format
+        // Wir mappen die API-Daten auf dein Wunschformat
         return data.slice(0, 30).map(p => ({
             name: p.name,
-            // Wir generieren die Bild-URL dynamisch über einen Image-Service
-            imageUrl: `https://api.valorant-crosshair.com/render?code=${p.crosshair_code}`,
+            imageUrl: p.image_url, // Die API liefert das Bild direkt mit!
             code: p.crosshair_code,
             game: 'Valorant'
         }));
     } catch (e) {
-        console.error("Valorant API Fehler:", e);
-        return []; // Fallback bei Fehler
+        console.error("API Fehler:", e.message);
+        return [];
     }
 }
 
