@@ -1,16 +1,24 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs');
-
 async function scrapePage(browser, url, gameName, limit = 30) {
+    console.log(`Lade ${gameName} von: ${url}`);
     const page = await browser.newPage();
-    // Wichtig für Headless: User-Agent setzen
     await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
     
     await page.goto(url, { waitUntil: 'networkidle2' });
+    // Nach dem goto:
+    console.log("Seiten-Titel:", await page.title());
+    const html = await page.evaluate(() => document.body.innerHTML);
+    console.log("HTML-Auszug:", html.substring(0, 500)); // Zeigt uns die ersten 500 Zeichen des Body
+
+    // DEBUG: Falls leer, HTML ausgeben
+    const content = await page.content();
+    if (!content.includes('role="button"')) {
+        console.warn(`Warnung: Keine Button-Elemente auf ${gameName} gefunden!`);
+    }
 
     const data = await page.evaluate((limit, gameName) => {
-        const players = [];
+        // Möglicherweise nutzen sie hier eine andere Klasse oder Struktur
         const items = document.querySelectorAll('li[role="button"]');
+        const players = [];
         items.forEach((item) => {
             if (players.length >= limit) return;
             const name = item.querySelector('h2 a')?.innerText.trim();
@@ -27,23 +35,3 @@ async function scrapePage(browser, url, gameName, limit = 30) {
     await page.close();
     return data;
 }
-
-async function run() {
-    // puppeteer.launch mit --no-sandbox ist auf GitHub Actions zwingend
-    const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-    const targets = [
-        { url: 'https://procrosshairs.com/', game: 'CS2' },
-        { url: 'https://procrosshairs.com/valorant', game: 'Valorant' }
-    ];
-
-    let allPresets = [];
-    for (const target of targets) {
-        const data = await scrapePage(browser, target.url, target.game, 30);
-        allPresets = allPresets.concat(data);
-    }
-
-    await browser.close();
-    fs.writeFileSync('./presets.json', JSON.stringify(allPresets, null, 2));
-}
-
-run();
