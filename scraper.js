@@ -1,30 +1,52 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-async function scrapePage(browser, url, gameName) {
+async function scrapePage(browser, url, game) {
+    console.log(`Scrape ${game} von: ${url}`);
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
-    await new Promise(r => setTimeout(r, 7000));
+    
+    // Warte kurz, damit die Liste geladen wird
+    await new Promise(r => setTimeout(r, 5000));
 
-    const debugData = await page.evaluate(() => {
-        const item = document.querySelector('li[role="button"]'); // Wir nehmen nur das erste
-        if (!item) return "Kein Button gefunden";
+    const data = await page.evaluate((game) => {
+        const items = document.querySelectorAll('li[role="button"]');
+        const results = [];
         
-        // Wir geben den gesamten Text-Inhalt des Elements aus
-        return {
-            innerText: item.innerText,
-            outerHTML: item.outerHTML.substring(0, 500) // Zeigt uns die internen Klassen/Strukturen
-        };
-    });
+        items.forEach(item => {
+            const name = item.querySelector('h2 a')?.innerText;
+            const img = item.querySelector('img');
+            const altText = img?.getAttribute('alt') || "";
+            
+            // Der Code ist alles nach dem Doppelpunkt im alt-Text
+            const code = altText.split(': ')[1] || "";
+            
+            if (name && code) {
+                results.push({
+                    name: name,
+                    imageUrl: img.src,
+                    code: code,
+                    game: game
+                });
+            }
+        });
+        return results;
+    }, game);
 
-    console.log(`Debug für ${gameName}:`, debugData);
     await page.close();
-    return [];
+    return data;
 }
 
 async function run() {
     const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-    await scrapePage(browser, 'https://procrosshairs.com/valorant', 'Valorant');
+    
+    const cs2 = await scrapePage(browser, 'https://procrosshairs.com/', 'CS2');
+    const valorant = await scrapePage(browser, 'https://procrosshairs.com/valorant', 'Valorant');
+    
+    const all = [...cs2, ...valorant];
+    fs.writeFileSync('./presets.json', JSON.stringify(all, null, 2));
+    console.log(`Fertig! ${all.length} Presets gefunden.`);
+    
     await browser.close();
 }
 run();
