@@ -6,6 +6,15 @@ const path = require('path');
 const PRESETS_PATH = path.join(__dirname, 'presets.json');
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Getarnte Header, damit die Webseite uns wie einen echten Browser behandelt
+const httpOptions = {
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'de,en-US;q=0.7,en;q=0.3'
+    }
+};
+
 function rgbToHex(r, g, b) {
     if (r === undefined || g === undefined || b === undefined) return "#00ff00";
     const toHex = (c) => {
@@ -66,14 +75,14 @@ function cleanName(name) {
 
 async function run() {
     try {
-        console.log("Starte Fadenkreuz-Scraper...");
+        console.log("Starte Fadenkreuz-Scraper mit Browser-Emulation...");
         const baseUrl = 'https://procrosshairs.com';
         
         const cs2Urls = [];
         const valUrls = [];
 
         console.log("Lese CS2 Übersichtsseite ein...");
-        const htmlCS2 = await axios.get(baseUrl);
+        const htmlCS2 = await axios.get(baseUrl, httpOptions);
         let $ = cheerio.load(htmlCS2.data);
         $('a[href*="/player/cs2/"]').each((i, el) => {
             if (cs2Urls.length < 20) {
@@ -84,7 +93,7 @@ async function run() {
         });
 
         console.log("Lese Valorant Übersichtsseite ein...");
-        const htmlVal = await axios.get(`${baseUrl}/valorant`);
+        const htmlVal = await axios.get(`${baseUrl}/valorant`, httpOptions);
         $ = cheerio.load(htmlVal.data);
         $('a[href*="/player/valorant/"]').each((i, el) => {
             if (valUrls.length < 20) {
@@ -103,17 +112,15 @@ async function run() {
         for (const url of cs2Urls) {
             try {
                 const urlName = url.split('/').pop();
-                console.log(`Verarbeite CS2 Profil von: ${urlName}`);
                 
-                const profilePage = await axios.get(url);
-                const rawHtml = profilePage.data; // Der komplette HTML Quellcode als Text
+                const profilePage = await axios.get(url, httpOptions);
+                const rawHtml = profilePage.data;
 
-                // GLOBALE REGEX-SUCHE IM REINEN TEXT (Umgeht alle kaputten HTML-Selektoren!)
                 const shareCodeMatch = rawHtml.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
                 const consoleStringMatch = rawHtml.match(/cl_crosshairgap\s+[^"]+/);
 
                 const shareCode = shareCodeMatch ? shareCodeMatch[0] : "";
-                const consoleString = consoleStringMatch ? consoleStringMatch[0].split(';')[0] + ';' + consoleStringMatch[0].split(';').slice(1).join(';') : "";
+                const consoleString = consoleStringMatch ? consoleStringMatch[0] : "";
 
                 if (shareCode) {
                     const parsedData = parseCS2Config(consoleString || rawHtml);
@@ -128,7 +135,7 @@ async function run() {
                         existingPro.cl_crosshairdot = parsedData.cl_crosshairdot;
                         existingPro.color = parsedData.color;
                         existingPro.share_code = shareCode;
-                        console.log(`-> Werte für ${existingPro.name} aktualisiert! (Gap: ${existingPro.cl_crosshairgap})`);
+                        console.log(`[UPDATE] ${existingPro.name} -> Code: ${shareCode.substring(0,10)}... | Gap: ${existingPro.cl_crosshairgap}`);
                     } else {
                         presets.pros.push({
                             name: displayName,
@@ -136,10 +143,10 @@ async function run() {
                             ...parsedData,
                             share_code: shareCode
                         });
-                        console.log(`-> ${displayName} neu hinzugefügt!`);
+                        console.log(`[NEU] ${displayName} hinzugefügt.`);
                     }
                 } else {
-                    console.log(`-> Kein Share-Code für ${urlName} im HTML-Text gefunden.`);
+                    console.log(`[WARNUNG] Kein Code im HTML-Text gefunden für: ${urlName}`);
                 }
                 await delay(5000);
             } catch (err) {
@@ -151,12 +158,10 @@ async function run() {
         for (const url of valUrls) {
             try {
                 const urlName = url.split('/').pop();
-                console.log(`Verarbeite Valorant Profil von: ${urlName}`);
                 
-                const profilePage = await axios.get(url);
+                const profilePage = await axios.get(url, httpOptions);
                 const rawHtml = profilePage.data;
 
-                // Valorant Codes fangen meistens mit 0;P; oder Ähnlichem an
                 const valCodeMatch = rawHtml.match(/0;P;[A-Za-z0-9;.-]+/);
                 const shareCode = valCodeMatch ? valCodeMatch[0] : "";
 
@@ -173,7 +178,7 @@ async function run() {
                         existingPro.show_dot = parsedData.show_dot;
                         existingPro.color = parsedData.color;
                         existingPro.share_code = shareCode;
-                        console.log(`-> Werte für ${existingPro.name} (Val) aktualisiert!`);
+                        console.log(`[UPDATE] ${existingPro.name} (VAL) -> Code gefunden.`);
                     } else {
                         presets.pros.push({
                             name: displayName,
@@ -181,10 +186,10 @@ async function run() {
                             ...parsedData,
                             share_code: shareCode
                         });
-                        console.log(`-> ${displayName} (Val) neu hinzugefügt!`);
+                        console.log(`[NEU] ${displayName} (VAL) hinzugefügt.`);
                     }
                 } else {
-                    console.log(`-> Kein Valorant-Code für ${urlName} gefunden.`);
+                    console.log(`[WARNUNG] Kein Valorant-Code gefunden für: ${urlName}`);
                 }
                 await delay(5000);
             } catch (err) {
@@ -192,9 +197,10 @@ async function run() {
             }
         }
 
-        presets.lastUpdated = new Date().toLocaleDateString('de-DE');
+        // Zwingt GitHub Actions dazu, die Datei zu aktualisieren, indem wir den Zeitstempel sekundengenau setzen
+        presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("presets.json erfolgreich überschrieben!");
+        console.log("Speichern abgeschlossen.");
 
     } catch (error) {
         console.error("Kritischer globaler Fehler:", error);
