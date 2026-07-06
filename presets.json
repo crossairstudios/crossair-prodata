@@ -17,6 +17,8 @@
     { "name": "FalleN", "game": "CS2", "cl_crosshairsize": 4, "cl_crosshairthickness": 1, "cl_crosshairgap": -1, "cl_crosshairdot": 0, "color": "#00ff00", "share_code": "CSGO-i2pxA-wu3wu-KcSnD-QWX3U-33tjH" },
     { "name": "coldzera", "game": "CS2", "cl_crosshairsize": 2.5, "cl_crosshairthickness": 1, "cl_crosshairgap": -2, "cl_crosshairdot": 0, "color": "#00ff00", "share_code": "CSGO-2pFKO-USwcf-Whzv3-jnHyz-MQfzY" },
     { "name": "JKS", "game": "CS2", "cl_crosshairsize": 2, "cl_crosshairthickness": 1, "cl_crosshairgap": -3, "cl_crosshairdot": 0, "color": "#00ff00", "share_code": "CSGO-AnXid-SpS6H-K46mD-wXv9B-BFT8b" },
+    { "name": "Xantares", "game": "CS2", "cl_crosshairsize": 3, "cl_crosshairthickness": 1, "cl_crosshairgap": 0, "cl_crosshairdot": 0, "color": "#00ff00", "share_code": "0;P;c;1;o;1;0l;3;0o;0;0a;1;0f;0;1b;0" },
+    { "name": "ZywOo (Dot)", "game": "CS2", "cl_crosshairsize": 0, "cl_crosshairthickness": 2, "cl_crosshairgap": -1, "cl_crosshairdot": 1, "color": "#00ff00", "share_code": "CSGO-CR69A-O3Y45-D66Un-6K68A-867AL" },
     
     { "name": "TenZ", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#ffffff", "share_code": "0;s;1;P;c;5;h;0;m;1;0l;4;0o;2;0f;0;1b;0;S;c;4;o;1" },
     { "name": "aspas", "game": "Valorant", "inner_length": 3, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#00ffff", "share_code": "0;P;c;5;h;0;0l;3;0o;2;0a;1;0f;0;1b;0" },
@@ -33,7 +35,9 @@
     { "name": "shazham", "game": "Valorant", "inner_length": 5, "inner_thickness": 1, "inner_gap": 2, "show_dot": false, "color": "#00ff00", "share_code": "0;P;c;1;o;1;0l;5;0o;2;0a;1;0f;0;1b;0" },
     { "name": "sinatraa", "game": "Valorant", "inner_length": 3, "inner_thickness": 1, "inner_gap": 3, "show_dot": false, "color": "#00ff00", "share_code": "0;P;c;1;0l;3;0o;3;0a;1;0f;0;1b;0" },
     { "name": "Hiko", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 4, "show_dot": false, "color": "#00ff00", "share_code": "0;P;c;1;h;0;0l;4;0o;4;0a;1;0f;0;1b;0" },
-    { "name": "ShahZaM", "game": "Valorant", "inner_length": 4, "inner_thickness": 1.5, "inner_gap": 2, "show_dot": false, "color": "#00ffff", "share_code": "0;P;c;5;o;1;0l;4;0t;1.5;0o;2;0a;1;0f;0;1b;0" }
+    { "name": "ShahZaM", "game": "Valorant", "inner_length": 4, "inner_thickness": 1.5, "inner_gap": 2, "show_dot": false, "color": "#00ffff", "share_code": "0;P;c;5;o;1;0l;4;0t;1.5;0o;2;0a;1;0f;0;1b;0" },
+    { "name": "tarik", "game": "Valorant", "inner_length": 4, "inner_thickness": 2, "inner_gap": 2, "show_dot": false, "color": "#00ff00", "share_code": "0;P;c;1;o;1;0l;4;0o;2;0a;1;0f;0;1b;0" },
+    { "name": "cNed", "game": "Valorant", "inner_length": 2, "inner_thickness": 1, "inner_gap": 1, "show_dot": false, "color": "#ffffff", "share_code": "0;P;o;1;0l;2;0o;1;0a;1;0f;0;1b;0" }
   ],
   "gamePresets": [
     { "name": "Warzone Center Dot", "game": "CoD", "app_size": 0, "app_thickness": 0, "app_gap": 0, "app_dot": true, "app_dot_size": 3, "color": "#ffff00", "description": "Perfekt für das Zentrieren beim Hüftfeuer." },
