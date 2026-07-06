@@ -1,53 +1,53 @@
 {
-  "lastUpdated": "6.7.2026, 09:02:56",
+  "lastUpdated": "6.7.2026, 09:05:43",
   "pros": [
     {
-      "name": "s1mple",
+      "name": "S1mple",
       "game": "CS2",
-      "cl_crosshairsize": 2,
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4.5,
       "cl_crosshairdot": 0,
-      "color": "#ffff00",
-      "share_code": "CSGO-MQfzY-jnHyz-Whzv3-USwcf-2pFKO"
+      "color": "#00ff00",
+      "share_code": "CSGO-UseJt-3oTvn-47wPX-hEyER-WZfiK"
     },
     {
-      "name": "ZywOo",
+      "name": "Zywoo",
       "game": "CS2",
       "share_code": "CSGO-KDOkV-jUpoE-GdhAh-YzbZL-MYXTB",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairsize": 1.5,
+      "cl_crosshairthickness": 0.5,
+      "cl_crosshairgap": -2.2,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
     {
-      "name": "NiKo",
+      "name": "Niko",
       "game": "CS2",
       "share_code": "CSGO-m89VO-6zPDr-53TJ9-OySAJ-V8Y2Q",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1.5,
+      "cl_crosshairgap": -5,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
     {
-      "name": "m0NESY",
+      "name": "M0nesy",
       "game": "CS2",
       "share_code": "CSGO-JV6Rw-9sfQB-UzokG-SHqBx-sbK5O",
-      "cl_crosshairsize": 2,
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4,
       "cl_crosshairdot": 0,
-      "color": "#00ff00"
+      "color": "#00ffaa"
     },
     {
-      "name": "donk",
+      "name": "Donk",
       "game": "CS2",
       "share_code": "CSGO-2uZLz-jXPTZ-SUkJx-dmJyv-UxQRO",
-      "cl_crosshairsize": 2,
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
@@ -72,24 +72,24 @@
       "share_code": "CSGO-BFT8b-AnXid-SpS6H-K46mD-wXv9B"
     },
     {
-      "name": "ropz",
+      "name": "Ropz",
       "game": "CS2",
       "share_code": "CSGO-nCfX7-54ue9-aC5eV-6Womf-Q6izO",
       "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairthickness": 0.5,
+      "cl_crosshairgap": -3,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
     {
       "name": "Twistzz",
       "game": "CS2",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -7,
       "cl_crosshairdot": 0,
-      "color": "#00ffff",
-      "share_code": "CSGO-Yyv9B-Gf76q-p88An-T67bA-Y86x9"
+      "color": "#00ff00",
+      "share_code": "CSGO-Q3Syz-WOaGL-9WTqW-9N3iJ-e64RG"
     },
     {
       "name": "broky",
@@ -162,12 +162,12 @@
       "share_code": "CSGO-AnXid-SpS6H-K46mD-wXv9B-BFT8b"
     },
     {
-      "name": "XANTARES",
+      "name": "Xantares",
       "game": "CS2",
       "share_code": "CSGO-xbpe2-E24RJ-YXNuO-pQvt8-ppNAK",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairsize": 3,
+      "cl_crosshairthickness": 0.5,
+      "cl_crosshairgap": 0,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
@@ -392,24 +392,24 @@
       "color": "#00ff00"
     },
     {
-      "name": "sh1ro",
+      "name": "Sh1ro",
       "game": "CS2",
       "share_code": "CSGO-bk5KR-52jw7-tKRaw-7kzdw-hOxoO",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairsize": 1.5,
+      "cl_crosshairthickness": 0.6,
+      "cl_crosshairgap": -3,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
     {
-      "name": "KSCERATO",
+      "name": "Kscerato",
       "game": "CS2",
-      "share_code": "CSGO-uSeWF-F4v3i-yzDJ7-OEThH-CFCEB",
-      "cl_crosshairsize": 2,
+      "share_code": "CSGO-Jhfkc-4UpR6-DJftC-VfGek-pL3ED",
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4,
       "cl_crosshairdot": 0,
-      "color": "#00ff00"
+      "color": "#ffffff"
     },
     {
       "name": "w0nderful",
@@ -422,7 +422,7 @@
       "color": "#00ff00"
     },
     {
-      "name": "xertioN",
+      "name": "Xertion",
       "game": "CS2",
       "share_code": "CSGO-USKR6-GFQxh-Mp4Wu-3PFHU-zj9aC",
       "cl_crosshairsize": 2,
@@ -442,22 +442,22 @@
       "color": "#00ff00"
     },
     {
-      "name": "flameZ",
+      "name": "Flamez",
       "game": "CS2",
       "share_code": "CSGO-ANFqt-s6dDk-cZGKb-dMXSu-wzUrC",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
+      "cl_crosshairsize": 1.5,
+      "cl_crosshairthickness": 0.6,
       "cl_crosshairgap": -2,
-      "cl_crosshairdot": 0,
+      "cl_crosshairdot": 1,
       "color": "#00ff00"
     },
     {
-      "name": "kyousuke",
+      "name": "Kyousuke",
       "game": "CS2",
-      "share_code": "CSGO-eHZw3-8hCwT-qipDN-CHFWT-nQopQ",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "share_code": "CSGO-m89VO-6zPDr-53TJ9-OySAJ-V8Y2Q",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1.5,
+      "cl_crosshairgap": -5,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
@@ -472,22 +472,22 @@
       "color": "#00ff00"
     },
     {
-      "name": "molodoy",
+      "name": "Molodoy",
       "game": "CS2",
       "share_code": "CSGO-Un9sK-tQVUX-avrUV-WXfxK-pBtdA",
-      "cl_crosshairsize": 2,
-      "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairsize": 1.5,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -3,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
     {
-      "name": "b1t",
+      "name": "B1t",
       "game": "CS2",
       "share_code": "CSGO-u2H9q-R3KDb-ijHuY-Bfizr-J9T8N",
-      "cl_crosshairsize": 2,
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
@@ -552,14 +552,14 @@
       "color": "#00ff00"
     },
     {
-      "name": "frozen",
+      "name": "Frozen",
       "game": "CS2",
-      "share_code": "CSGO-fhT35-p4je7-fDqhM-U4xpR-TDhnL",
-      "cl_crosshairsize": 2,
+      "share_code": "CSGO-nX4aQ-nMxvT-vWUn8-fkCTG-CuSyL",
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4,
       "cl_crosshairdot": 0,
-      "color": "#00ff00"
+      "color": "#00ffa8"
     },
     {
       "name": "910",
@@ -582,12 +582,12 @@
       "color": "#00ff00"
     },
     {
-      "name": "YEKINDAR",
+      "name": "Yekindar",
       "game": "CS2",
       "share_code": "CSGO-F4wiZ-mSAUQ-QHqmj-nq42i-uTaUN",
-      "cl_crosshairsize": 2,
+      "cl_crosshairsize": 1,
       "cl_crosshairthickness": 1,
-      "cl_crosshairgap": -2,
+      "cl_crosshairgap": -4,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
     },
@@ -700,6 +700,236 @@
       "cl_crosshairgap": -2,
       "cl_crosshairdot": 0,
       "color": "#00ff00"
+    },
+    {
+      "name": "Generator",
+      "game": "CS2",
+      "cl_crosshairsize": 0,
+      "cl_crosshairthickness": 2,
+      "cl_crosshairgap": -8.5,
+      "cl_crosshairdot": 1,
+      "color": "#ffffff",
+      "share_code": ""
+    },
+    {
+      "name": "Torzsi",
+      "game": "CS2",
+      "cl_crosshairsize": 2,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -3,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-hP4eK-PqkTQ-jo4T7-cmpxc-ZHZML"
+    },
+    {
+      "name": "Spinx",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-yn3PL-JSdWY-AUUW2-5iDcM-WiA6Q"
+    },
+    {
+      "name": "Senzu",
+      "game": "CS2",
+      "cl_crosshairsize": 2,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -3,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-daQoo-dQ5Pq-enaFw-vKEth-d7eyC"
+    },
+    {
+      "name": "Mezii",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-zD76C-Kf7Dy-MBNJD-kDSZz-mGeFO"
+    },
+    {
+      "name": "Natre",
+      "game": "CS2",
+      "cl_crosshairsize": 2,
+      "cl_crosshairthickness": 0.5,
+      "cl_crosshairgap": -3,
+      "cl_crosshairdot": 0,
+      "color": "#00ee90",
+      "share_code": "CSGO-hvZ4i-4S8Mt-3e4vy-xcofo-Kj5BO"
+    },
+    {
+      "name": "Bloch",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-GsnzG-rBZDa-ry2xe-zrqZs-qKwLA"
+    },
+    {
+      "name": "B1st",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -2.7,
+      "cl_crosshairdot": 1,
+      "color": "#32ffc8",
+      "share_code": "CSGO-CEcrQ-h2WKh-8uAEN-Cywds-29z6A"
+    },
+    {
+      "name": "Kl1m",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-ucdpE-kvWJs-Tuszn-ZunXT-Xh5BO"
+    },
+    {
+      "name": "Zero",
+      "game": "CS2",
+      "cl_crosshairsize": 0,
+      "cl_crosshairthickness": 0.5,
+      "cl_crosshairgap": -3,
+      "cl_crosshairdot": 1,
+      "color": "#00ff00",
+      "share_code": "CSGO-jUJZd-5ZYta-4cGdL-dxoWC-8MUnB"
+    },
+    {
+      "name": "Clouden",
+      "game": "CS2",
+      "cl_crosshairsize": 1.5,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -3,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-Mzhnr-H3D9h-HBeio-uaOnt-ruWPA"
+    },
+    {
+      "name": "Lewis",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-uohya-3Y7OQ-z8Kxz-YPZA2-KS8SA"
+    },
+    {
+      "name": "Deko",
+      "game": "CS2",
+      "cl_crosshairsize": 3,
+      "cl_crosshairthickness": 0.6,
+      "cl_crosshairgap": -2.5,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-4hxiH-pXq77-5yzUX-uDEtm-Nij5P"
+    },
+    {
+      "name": "Pain",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-4sopE-UHJUk-V8LSV-FTH4W-X3nQD"
+    },
+    {
+      "name": "Laykinn",
+      "game": "CS2",
+      "cl_crosshairsize": 0.8,
+      "cl_crosshairthickness": 0.8,
+      "cl_crosshairgap": -3.6,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-wbtNA-naFcf-WHdJh-q3Ctu-EjA6Q"
+    },
+    {
+      "name": "Smooya",
+      "game": "CS2",
+      "cl_crosshairsize": 3,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -2,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-rOK93-dzNNq-cGkye-wtq8z-xdfiK"
+    },
+    {
+      "name": "Try",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff91",
+      "share_code": "CSGO-zVW3L-i3uwx-TvBqz-qch8e-SLLTK"
+    },
+    {
+      "name": "Alv",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 0.1,
+      "cl_crosshairgap": -2,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-F2KZW-Rv2xY-HF6LS-KBJMR-JvjjD"
+    },
+    {
+      "name": "St0m4k",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-ToYwj-8htw8-EnmfY-XvJvy-K8OEL"
+    },
+    {
+      "name": "N0te",
+      "game": "CS2",
+      "cl_crosshairsize": 1.9,
+      "cl_crosshairthickness": 0.2,
+      "cl_crosshairgap": -2.5,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-kBXYv-7aw4N-ZAtqF-u5694-Xz3JE"
+    },
+    {
+      "name": "Blamef",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 0,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-cbemP-4Khr9-JB6DQ-yr5Yo-AAjLJ"
+    },
+    {
+      "name": "Degster",
+      "game": "CS2",
+      "cl_crosshairsize": 1,
+      "cl_crosshairthickness": 1,
+      "cl_crosshairgap": -4,
+      "cl_crosshairdot": 0,
+      "color": "#00ff00",
+      "share_code": "CSGO-s5Qbj-nvF89-cJjDd-mRdSG-5Yt4N"
+    },
+    {
+      "name": "Gr1ks",
+      "game": "CS2",
+      "cl_crosshairsize": 0.8,
+      "cl_crosshairthickness": 0.2,
+      "cl_crosshairgap": -2.6,
+      "cl_crosshairdot": 1,
+      "color": "#00ff00",
+      "share_code": "CSGO-Rz43V-NMBtM-Ea6dO-XGKZL-OmrqK"
     }
   ],
   "gamePresets": [
