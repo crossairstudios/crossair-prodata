@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 
 const PRESETS_PATH = path.join(__dirname, 'presets.json');
-
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 function rgbToHex(r, g, b) {
@@ -16,7 +15,6 @@ function rgbToHex(r, g, b) {
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-// Hilfsfunktion um "true"/"1" zu 1 und "false"/"0" zu 0 zu machen
 function parseBooleanOrNumber(val) {
     if (!val) return 0;
     const clean = val.trim().toLowerCase();
@@ -24,13 +22,10 @@ function parseBooleanOrNumber(val) {
     return 0;
 }
 
-// Überarbeiteter CS2 Parser, der auch "false" und "true" abfängt
 function parseCS2Config(configStr) {
     const sizeMatch = configStr.match(/cl_crosshairsize\s+([0-9.-]+)/);
     const thicknessMatch = configStr.match(/cl_crosshairthickness\s+([0-9.-]+)/);
     const gapMatch = configStr.match(/cl_crosshairgap\s+([0-9.-]+)/);
-    
-    // Fängt jetzt ([0-9]+|true|false) ab!
     const dotMatch = configStr.match(/cl_crosshairdot\s+([0-9a-zA-Z.-]+)/);
     
     const rMatch = configStr.match(/cl_crosshaircolor_r\s+([0-9]+)/);
@@ -65,7 +60,6 @@ function parseValorantConfig(configStr) {
     };
 }
 
-// Bereinigt Namen von URLs (z.B. "niko" -> "niko") für den sauberen Abgleich
 function cleanName(name) {
     return name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 }
@@ -112,20 +106,22 @@ async function run() {
                 console.log(`Verarbeite CS2 Profil von: ${urlName}`);
                 
                 const profilePage = await axios.get(url);
-                const $p = cheerio.load(profilePage.data);
-                
-                const shareCode = $p('input, textarea').eq(0).val() || "";
-                const consoleString = $p('input, textarea').eq(1).val() || "";
+                const rawHtml = profilePage.data; // Der komplette HTML Quellcode als Text
+
+                // GLOBALE REGEX-SUCHE IM REINEN TEXT (Umgeht alle kaputten HTML-Selektoren!)
+                const shareCodeMatch = rawHtml.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
+                const consoleStringMatch = rawHtml.match(/cl_crosshairgap\s+[^"]+/);
+
+                const shareCode = shareCodeMatch ? shareCodeMatch[0] : "";
+                const consoleString = consoleStringMatch ? consoleStringMatch[0].split(';')[0] + ';' + consoleStringMatch[0].split(';').slice(1).join(';') : "";
 
                 if (shareCode) {
-                    const parsedData = parseCS2Config(consoleString);
+                    const parsedData = parseCS2Config(consoleString || rawHtml);
                     const displayName = urlName.charAt(0).toUpperCase() + urlName.slice(1);
 
-                    // Extrem sicherer, bereinigter Abgleich
                     let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "CS2");
 
                     if (existingPro) {
-                        // FORCE-UPDATE: Wir überschreiben JETZT gnadenlos alle Werte
                         existingPro.cl_crosshairsize = parsedData.cl_crosshairsize;
                         existingPro.cl_crosshairthickness = parsedData.cl_crosshairthickness;
                         existingPro.cl_crosshairgap = parsedData.cl_crosshairgap;
@@ -142,6 +138,8 @@ async function run() {
                         });
                         console.log(`-> ${displayName} neu hinzugefügt!`);
                     }
+                } else {
+                    console.log(`-> Kein Share-Code für ${urlName} im HTML-Text gefunden.`);
                 }
                 await delay(5000);
             } catch (err) {
@@ -156,13 +154,14 @@ async function run() {
                 console.log(`Verarbeite Valorant Profil von: ${urlName}`);
                 
                 const profilePage = await axios.get(url);
-                const $p = cheerio.load(profilePage.data);
-                
-                const shareCode = $p('input, textarea').eq(0).val() || "";
-                const consoleString = $p('input, textarea').eq(1).val() || "";
+                const rawHtml = profilePage.data;
+
+                // Valorant Codes fangen meistens mit 0;P; oder Ähnlichem an
+                const valCodeMatch = rawHtml.match(/0;P;[A-Za-z0-9;.-]+/);
+                const shareCode = valCodeMatch ? valCodeMatch[0] : "";
 
                 if (shareCode) {
-                    const parsedData = parseValorantConfig(consoleString);
+                    const parsedData = parseValorantConfig(shareCode);
                     const displayName = urlName.charAt(0).toUpperCase() + urlName.slice(1);
 
                     let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "Valorant");
@@ -182,7 +181,10 @@ async function run() {
                             ...parsedData,
                             share_code: shareCode
                         });
+                        console.log(`-> ${displayName} (Val) neu hinzugefügt!`);
                     }
+                } else {
+                    console.log(`-> Kein Valorant-Code für ${urlName} gefunden.`);
                 }
                 await delay(5000);
             } catch (err) {
