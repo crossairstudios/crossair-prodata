@@ -11,9 +11,7 @@ async function scrapePage(url, gameName, limit = 30) {
         const $ = cheerio.load(html);
         const players = [];
 
-        // Wir iterieren über die Kacheln
         $('li[role="button"]').each((i, el) => {
-            // Stoppe, wenn wir das Limit erreicht haben
             if (players.length >= limit) return false;
 
             const name = $(el).find('h2 a').text().trim();
@@ -30,7 +28,6 @@ async function scrapePage(url, gameName, limit = 30) {
                 });
             }
         });
-
         return players;
     } catch (error) {
         console.error(`Fehler bei ${gameName}:`, error);
@@ -41,6 +38,7 @@ async function scrapePage(url, gameName, limit = 30) {
 async function run() {
     console.log("Starte Multi-Game Scraping...");
 
+    // Wir definieren alle Ziel-URLs
     const targets = [
         { url: 'https://procrosshairs.com/', game: 'CS2' },
         { url: 'https://procrosshairs.com/valorant', game: 'Valorant' }
@@ -48,14 +46,17 @@ async function run() {
 
     let allPresets = [];
 
+    // Wir sammeln nacheinander Daten in allPresets
     for (const target of targets) {
         const data = await scrapePage(target.url, target.game, 30);
+        console.log(`Gefunden für ${target.game}: ${data.length}`);
         allPresets = allPresets.concat(data);
     }
 
+    // Erst hier schreiben wir die Datei, nachdem ALLE Daten gesammelt wurden
     const outputPath = './presets.json';
     fs.writeFileSync(outputPath, JSON.stringify(allPresets, null, 2));
-    console.log(`Erfolg! Insgesamt ${allPresets.length} Presets in ${outputPath} gespeichert.`);
+    console.log(`Erfolg! Insgesamt ${allPresets.length} Presets gespeichert.`);
 }
 
 run();
