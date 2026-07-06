@@ -31,7 +31,7 @@ function parseBooleanOrNumber(val) {
 }
 
 function parseCS2Config(configStr) {
-    if (!configStr) return { cl_crosshairsize: 1, cl_crosshairthickness: 1, cl_crosshairgap: -4, cl_crosshairdot: 0, color: "#00ff00" };
+    if (!configStr) return { cl_crosshairsize: 2, cl_crosshairthickness: 1, cl_crosshairgap: -2, cl_crosshairdot: 0, color: "#00ff00" };
 
     const sizeMatch = configStr.match(/cl_crosshairsize\s+([0-9.-]+)/i);
     const thicknessMatch = configStr.match(/cl_crosshairthickness\s+([0-9.-]+)/i);
@@ -76,7 +76,7 @@ function cleanName(name) {
 
 async function run() {
     try {
-        console.log("Starte präzisen Element-Scraper (CS2 & Valorant)...");
+        console.log("Starte stabilen JSON-Massen-Scraper (CS2 & Valorant)...");
         const baseUrl = 'https://procrosshairs.com';
         
         const cs2Urls = [];
@@ -117,39 +117,37 @@ async function run() {
         });
         console.log(`Gefundene Valorant Spieler-URLs (${valUrls.length})`);
 
-        // --- 3. CS2 PRO_SEITEN PARSEN VIA ATTRIBUTEN ---
+        // --- 3. CS2 INTERN PARSEN ---
         for (const url of cs2Urls) {
             const urlName = url.split('/').pop();
             console.log(`[CS2] Analyse für: ${urlName}...`);
             try {
                 const profilePage = await axios.get(url, httpOptions);
                 const $p = cheerio.load(profilePage.data);
-
-                // Sucht nach Elementen, die den Share-Code oder die Befehle im Text/Attribut halten
-                let consoleString = "";
+                
                 let shareCode = "";
+                let consoleString = "";
 
-                // Wir suchen nach dem Input oder Button, der die Config kopiert
-                $p('input, button, div').each((i, el) => {
-                    const val = $p(el).val() || $p(el).attr('data-copy') || $p(el).text() || "";
-                    if (val.includes('cl_crosshairgap') && !consoleString) {
-                        consoleString = val;
+                // Auslesen des NextJS JSON State-Blocks
+                const nextDataText = $p('#__NEXT_DATA__').html();
+                if (nextDataText) {
+                    const nextData = JSON.parse(nextDataText);
+                    const playerData = nextData.props?.pageProps?.player;
+                    if (playerData) {
+                        shareCode = playerData.crosshair_code || "";
+                        consoleString = playerData.console_commands || "";
                     }
-                    const codeMatch = val.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
-                    if (codeMatch && !shareCode) {
-                        shareCode = codeMatch[0];
-                    }
-                });
+                }
 
-                // Letzter Fallback über die gesamte Seite falls die Schleife fehlschlägt
+                // Fallback falls JSON leer ist
                 if (!shareCode) {
-                    const pageText = $p.text();
-                    const codeMatch = pageText.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
+                    const rawHtml = profilePage.data;
+                    const codeMatch = rawHtml.match(/CSGO-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+-[A-Za-z0-9-]+/);
                     if (codeMatch) shareCode = codeMatch[0];
                 }
 
                 if (shareCode) {
-                    const parsedData = parseCS2Config(consoleString || $p.text());
+                    const parsedData = parseCS2Config(consoleString);
                     let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "CS2");
 
                     if (existingPro) {
@@ -171,7 +169,7 @@ async function run() {
                         console.log(`   -> Neu hinzugefügt.`);
                     }
                 } else {
-                    console.log(`   -> [FEHLER] Kein Code extrahierbar.`);
+                    console.log(`   -> [FEHLER] Kein Code für ${urlName} auffindbar.`);
                 }
                 await delay(3500);
             } catch(e) {
@@ -179,7 +177,7 @@ async function run() {
             }
         }
 
-        // --- 4. VALORANT PRO_SEITEN PARSEN VIA ATTRIBUTEN ---
+        // --- 4. VALORANT INTERN PARSEN ---
         for (const url of valUrls) {
             const urlName = url.split('/').pop();
             console.log(`[Valorant] Analyse für: ${urlName}...`);
@@ -188,16 +186,18 @@ async function run() {
                 const $p = cheerio.load(profilePage.data);
 
                 let shareCode = "";
-                $p('input, button, div').each((i, el) => {
-                    const val = $p(el).val() || $p(el).attr('data-copy') || $p(el).text() || "";
-                    const valCodeMatch = val.match(/0;P;[A-Za-z0-9;.-]+/);
-                    if (valCodeMatch && !shareCode) {
-                        shareCode = valCodeMatch[0];
+
+                const nextDataText = $p('#__NEXT_DATA__').html();
+                if (nextDataText) {
+                    const nextData = JSON.parse(nextDataText);
+                    const playerData = nextData.props?.pageProps?.player;
+                    if (playerData) {
+                        shareCode = playerData.crosshair_code || "";
                     }
-                });
+                }
 
                 if (!shareCode) {
-                    const valCodeMatch = $p.text().match(/0;P;[A-Za-z0-9;.-]+/);
+                    const valCodeMatch = profilePage.data.match(/0;P;[A-Za-z0-9;.-]+/);
                     if (valCodeMatch) shareCode = valCodeMatch[0];
                 }
 
@@ -223,6 +223,8 @@ async function run() {
                         });
                         console.log(`   -> Neu hinzugefügt.`);
                     }
+                } else {
+                    console.log(`   -> [FEHLER] Kein Code für ${urlName} auffindbar.`);
                 }
                 await delay(3500);
             } catch(e) {
