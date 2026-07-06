@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 
 const PRESETS_PATH = path.join(__dirname, 'presets.json');
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const httpOptions = {
     headers: {
@@ -12,55 +11,13 @@ const httpOptions = {
     }
 };
 
-// --- CS2 SHARE CODE DECODER LOGIK ---
-const DICTIONARY = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-
-function decodeShareCode(code) {
-    // Fallback-Standardwerte
-    const fallback = { cl_crosshairsize: 2, cl_crosshairthickness: 1, cl_crosshairgap: -2, cl_crosshairdot: 0, color: "#00ff00" };
-    
-    try {
-        const cleanCode = code.replace(/CSGO-|-/g, '');
-        if (cleanCode.length !== 25) return fallback;
-
-        // BigInt-Dekodierung des Base58-Strings
-        let num = 0n;
-        for (let i = 0; i < cleanCode.length; i++) {
-            const char = cleanCode[i];
-            const idx = DICTIONARY.indexOf(char);
-            if (idx === -1) return fallback;
-            num = num * 58n + BigInt(idx);
-        }
-
-        // Bytes extrahieren
-        const bytes = [];
-        for (let i = 0; i < 18; i++) {
-            bytes.push(Number((num >> BigInt(i * 8)) & 0xFFn));
-        }
-
-        // CS2 Byte-Mapping für die wichtigsten Crosshair-Werte
-        // (Werte sind im Code oft als Multiplikatoren von 0.1 oder mit Offsets gespeichert)
-        const size = bytes[3] !== undefined ? (bytes[3] / 10) : 2;
-        const thickness = bytes[4] !== undefined ? (bytes[4] / 10) : 1;
-        
-        // Gap hat im Byte-Code ein Offset von 128 für negative Werte
-        let gap = -2;
-        if (bytes[5] !== undefined) {
-            gap = bytes[5] > 128 ? (bytes[5] - 256) / 10 : bytes[5] / 10;
-        }
-        
-        const dot = bytes[6] & 1 ? 1 : 0;
-
-        return {
-            cl_crosshairsize: size || 2,
-            cl_crosshairthickness: thickness || 1,
-            cl_crosshairgap: gap,
-            cl_crosshairdot: dot,
-            color: "#00ff00" // Standard-Grün als solider Platzhalter
-        };
-    } catch (e) {
-        return fallback;
-    }
+function rgbToHex(r, g, b) {
+    if (r === undefined || g === undefined || b === undefined) return "#00ff00";
+    const toHex = (c) => {
+        const hex = Math.max(0, Math.min(255, parseInt(c))).toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+    };
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
 function cleanName(name) {
@@ -69,7 +26,7 @@ function cleanName(name) {
 
 async function run() {
     try {
-        console.log("Starte unfehlbaren ShareCode-Decoder-Scraper...");
+        console.log("Starte Astro-Script-Data-Extractor...");
         const baseUrl = 'https://procrosshairs.com';
         
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
@@ -77,62 +34,89 @@ async function run() {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
-        // 1. Links von Hauptseite holen
         const mainPage = await axios.get(baseUrl, httpOptions);
         const $ = cheerio.load(mainPage.data);
-        const cs2Urls = [];
+        
+        let rawDataText = "";
 
-        $('a[href*="/player/"]').each((i, el) => {
-            const href = $(el).attr('href');
-            if (href && !href.includes('/valorant/')) {
-                const fullUrl = href.startsWith('http') ? href : baseUrl + href;
-                if (!cs2Urls.includes(fullUrl) && cs2Urls.length < 40) {
-                    cs2Urls.push(fullUrl);
-                }
+        // Wir durchsuchen alle Inline-Scripts auf der Startseite nach dem Datenblock
+        $('script').each((i, el) => {
+            const text = $(el).html() || "";
+            // Häufig verstecken sich die Daten in einem großen Array/Objekt
+            if (!$(el).attr('src') && (text.includes('NiKo') || text.includes('donk'))) {
+                rawDataText = text;
+                console.log(`Verdächtiges Inline-Script gefunden! Länge: ${text.length} Zeichen.`);
             }
         });
-        console.log(`Gefundene echte CS2 Spieler-URLs: ${cs2Urls.length}`);
 
-        // 2. Spielerseiten abklatschen und Codes entschlüsseln
-        for (const url of cs2Urls) {
-            const urlChunks = url.split('/');
-            const urlName = urlChunks[urlChunks.length - 1] || "Unknown";
-            
-            try {
-                const profilePage = await axios.get(url, httpOptions);
-                
-                // Wir fischen den Share-Code heraus, der laut Debug-Log definitiv da ist!
-                const shareCodeMatch = profilePage.data.match(/(CSGO-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5})/i);
-                
-                if (shareCodeMatch) {
-                    const shareCode = shareCodeMatch[1];
-                    // Mathematische Entschlüsselung statt unzuverlässigem Text-Parsing!
-                    const parsedData = decodeShareCode(shareCode);
+        if (!rawDataText) {
+            console.log("Kritischer Fehler: Konnte das Daten-Script mit den Spielernamen nicht im HTML finden.");
+            return;
+        }
 
-                    let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "CS2");
-                    if (existingPro) {
-                        Object.assign(existingPro, parsedData, { share_code: shareCode });
-                    } else {
-                        presets.pros.push({ name: urlName, game: "CS2", ...parsedData, share_code: shareCode });
+        // Wir extrahieren alle JSON-ähnlichen Strukturen oder Objekte aus dem Script via Regex.
+        // Astro lagert Daten oft in kompakten Objekten ab. Wir extrahieren gezielt Blöcke, die wie Spieler aussehen.
+        // Ein typischer Block enthält Namen und Sharecode: {name: "NiKo", ...} oder ["NiKo", ...]
+        
+        // Da wir wissen, dass NiKo auf der Seite ist, suchen wir nach seiner Datenumgebung, um das Format zu verstehen.
+        const nikoIndex = rawDataText.indexOf('NiKo');
+        console.log("\n--- Vorschau der Datenstruktur rund um 'NiKo' ---");
+        console.log(rawDataText.substring(Math.max(0, nikoIndex - 300), Math.min(rawDataText.length, nikoIndex + 700)));
+        console.log("------------------------------------------------\n");
+
+        // Da wir jetzt flexibel parsen wollen, suchen wir nach allen Vorkommen von CSGO-Codes im Skript
+        // und versuchen, den Namen davor oder danach zu matchen.
+        const globalRegex = /\{[^{}]*?"crosshair_code"[^{}]*?\}/g; 
+        // Falls die Keys unzitiert sind (reines JS-Objekt statt JSON):
+        const jsObjectRegex = /\{[^{}]*?crosshair_code:[^{}]*?\}/g;
+
+        const matches = rawDataText.match(globalRegex) || rawDataText.match(jsObjectRegex) || [];
+        console.log(`Mögliche Spieler-Objekte im Script gefunden: ${matches.length}`);
+
+        // Falls wir direkt strukturierte Objekte finden, parsen wir sie hier
+        if (matches.length > 0) {
+            matches.forEach(objStr => {
+                try {
+                    // Fix für unzitierte JS-Keys, falls nötig, um es in JSON zu verwandeln
+                    const cleanJsonStr = objStr
+                        .replace(/([{,])\s*([a-zA-Z0-9_]+)\s*:/g, '$1"$2":') // Keys zitieren
+                        .replace(/'/g, '"'); // Single Quotes zu Double Quotes
+                    
+                    const p = JSON.parse(cleanJsonStr);
+                    const name = p.name || p.slug;
+                    const shareCode = p.crosshair_code || p.code;
+                    
+                    if (name && shareCode) {
+                        // Wenn die Werte direkt als Zahlen im Objekt liegen:
+                        const parsedData = {
+                            cl_crosshairsize: p.size !== undefined ? parseFloat(p.size) : (p.cl_crosshairsize !== undefined ? parseFloat(p.cl_crosshairsize) : 2),
+                            cl_crosshairthickness: p.thickness !== undefined ? parseFloat(p.thickness) : (p.cl_crosshairthickness !== undefined ? parseFloat(p.cl_crosshairthickness) : 1),
+                            cl_crosshairgap: p.gap !== undefined ? parseFloat(p.gap) : (p.cl_crosshairgap !== undefined ? parseFloat(p.cl_crosshairgap) : -2),
+                            cl_crosshairdot: p.dot ? 1 : 0,
+                            color: rgbToHex(p.color_r, p.color_g, p.color_b)
+                        };
+
+                        let existingPro = presets.pros.find(ex => cleanName(ex.name) === cleanName(name) && ex.game === "CS2");
+                        if (existingPro) {
+                            Object.assign(existingPro, parsedData, { share_code: shareCode });
+                        } else {
+                            presets.pros.push({ name, game: "CS2", ...parsedData, share_code: shareCode });
+                        }
+                        console.log(`[Gefunden] ${name} -> Gap: ${parsedData.cl_crosshairgap}, Code: ${shareCode}`);
                     }
-                    console.log(`[Erfolg] ${urlName} -> Code: ${shareCode} | extrahiertes Gap: ${parsedData.cl_crosshairgap}`);
-                } else {
-                    console.log(`[Fehler] Kein Share-Code für ${urlName} im HTML.`);
+                } catch (e) {
+                    // Ignorieren falls ein Block kein valides JSON war
                 }
-
-                await delay(2000);
-            } catch (e) {
-                console.error(`Fehler bei ${urlName}:`, e.message);
-            }
+            });
         }
 
         // Speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nAbsolut fertig! presets.json wurde erfolgreich mathematisch berechnet.");
+        console.log("\nScan abgeschlossen.");
 
     } catch (error) {
-        console.error("Kritischer Fehler im Ablauf:", error.message);
+        console.error("Fehler:", error.message);
     }
 }
 
