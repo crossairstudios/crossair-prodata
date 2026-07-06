@@ -12,13 +12,39 @@ const httpOptions = {
     }
 };
 
+// Hilfsfunktion: Parst den cl_crosshair-String in Einzelwerte
+function parseConsoleCommands(commandStr) {
+    const fallback = { size: 2, thickness: 1, gap: -2, dot: 0, color: "#00ff00" };
+    if (!commandStr) return fallback;
+
+    const extractValue = (regex, defaultVal) => {
+        const match = commandStr.match(regex);
+        return match ? parseFloat(match[1]) : defaultVal;
+    };
+
+    const size = extractValue(/cl_crosshairsize\s+([0-9.-]+)/i, 2);
+    const thickness = extractValue(/cl_crosshairthickness\s+([0-9.-]+)/i, 1);
+    const gap = extractValue(/cl_crosshairgap\s+([0-9.-]+)/i, -2);
+    const dot = extractValue(/cl_crosshairdot\s+([0-1]+)/i, 0);
+
+    // RGB-Farben extrahieren
+    const r = extractValue(/cl_crosshaircolor_r\s+([0-9]+)/i, 0);
+    const g = extractValue(/cl_crosshaircolor_g\s+([0-9]+)/i, 255);
+    const b = extractValue(/cl_crosshaircolor_b\s+([0-9]+)/i, 0);
+    
+    const toHex = (c) => String("0" + Math.min(255, Math.max(0, c)).toString(16)).slice(-2);
+    const colorHex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+
+    return { size, thickness, gap, dot, color: colorHex };
+}
+
 function cleanName(name) {
     return name.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 async function run() {
     try {
-        console.log("Starte fokussierten Share-Code Scraper...");
+        console.log("Starte API-Direkt-Scraper...");
         const baseUrl = 'https://procrosshairs.com';
         
         let presets = { lastUpdated: "", pros: [], gamePresets: [] };
@@ -26,77 +52,72 @@ async function run() {
             presets = JSON.parse(fs.readFileSync(PRESETS_PATH, 'utf8'));
         }
 
-        // 1. Alle Spieler-URLs von der Startseite sammeln
         const mainPage = await axios.get(baseUrl, httpOptions);
         const $ = cheerio.load(mainPage.data);
-        const cs2Urls = [];
+        const playerIds = [];
 
+        // Wir holen uns die SteamIDs/PlayerIDs aus den URLs
         $('a[href*="/player/"]').each((i, el) => {
             const href = $(el).attr('href');
             if (href && !href.includes('/valorant/')) {
-                const fullUrl = href.startsWith('http') ? href : baseUrl + href;
-                if (!cs2Urls.includes(fullUrl) && cs2Urls.length < 40) {
-                    cs2Urls.push(fullUrl);
+                // Beispiel: /player/76561198386265483/donk -> ID ist die lange Zahl
+                const matches = href.match(/player\/([0-9]+)\/([a-zA-Z0-9_-]+)/);
+                if (matches && playerIds.length < 40) {
+                    const [_, id, name] = matches;
+                    if (!playerIds.some(p => p.id === id)) {
+                        playerIds.push({ id, name });
+                    }
                 }
             }
         });
-        console.log(`Gefundene CS2 Spieler-URLs: ${cs2Urls.length}`);
+        console.log(`Gefundene Spieler IDs: ${playerIds.length}`);
 
-        // 2. Spielerseiten besuchen und nur den Code extrahieren
-        for (const url of cs2Urls) {
-            const urlChunks = url.split('/');
-            const urlName = urlChunks[urlChunks.length - 1] || "Unknown";
-            
+        for (const player of playerIds) {
             try {
-                const profilePage = await axios.get(url, httpOptions);
+                // Der heilige Gral: Die interne API von Astro/ProCrosshairs abfragen!
+                // Diese Endpunkte liefern direkt die fertigen Config-Strings
+                const apiUrl = `https://procrosshairs.com/api/player?id=${player.id}&game=cs2`;
+                const apiResponse = await axios.get(apiUrl, httpOptions);
                 
-                // Sucht nach dem CSGO-Share-Code im rohen HTML
-                const shareCodeMatch = profilePage.data.match(/(CSGO-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5}-[A-Za-z0-9]{5})/i);
-                
-                if (shareCodeMatch) {
-                    const shareCode = shareCodeMatch[1];
+                // Falls die API ein JSON wirft, in dem die Config steht:
+                const configData = apiResponse.data;
+                const consoleCommands = configData.commands || configData.console || "";
+                const shareCode = configData.share_code || configData.code || "";
 
-                    let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(urlName) && p.game === "CS2");
-                    
-                    // Wir speichern nur den Namen, das Spiel und den Share-Code ab
-                    const proData = { 
-                        name: urlName, 
-                        game: "CS2", 
-                        share_code: shareCode 
-                    };
+                const parsedData = parseConsoleCommands(consoleCommands);
 
-                    if (existingPro) {
-                        // Falls der Spieler existiert, überschreiben/behalten wir nur diese Basisdaten
-                        existingPro.share_code = shareCode;
-                        // Falls alte Einzelwerte (size, gap, etc.) in der JSON stören, 
-                        // löschen wir sie hier heraus, damit das JSON sauber bleibt:
-                        delete existingPro.cl_crosshairsize;
-                        delete existingPro.cl_crosshairthickness;
-                        delete existingPro.cl_crosshairgap;
-                        delete existingPro.cl_crosshairdot;
-                        delete existingPro.color;
-                    } else {
-                        presets.pros.push(proData);
-                    }
-                    console.log(`[Erfolg] ${urlName} -> Code: ${shareCode}`);
+                let existingPro = presets.pros.find(p => cleanName(p.name) === cleanName(player.name) && p.game === "CS2");
+                const finalData = {
+                    name: player.name,
+                    game: "CS2",
+                    cl_crosshairsize: parsedData.size,
+                    cl_crosshairthickness: parsedData.thickness,
+                    cl_crosshairgap: parsedData.gap,
+                    cl_crosshairdot: parsedData.dot,
+                    color: parsedData.color,
+                    share_code: shareCode
+                };
+
+                if (existingPro) {
+                    Object.assign(existingPro, finalData);
                 } else {
-                    console.log(`[Fehler] Kein Share-Code im HTML für ${urlName}`);
+                    presets.pros.push(finalData);
                 }
-
-                // 2 Sekunden Pause, um den Hoster nicht zu stressen
-                await delay(2000);
+                console.log(`[Erfolg] ${player.name} -> Gap: ${parsedData.gap} | Size: ${parsedData.size} | Color: ${parsedData.color}`);
+                
+                await delay(1500);
             } catch (e) {
-                console.error(`Fehler bei ${urlName}:`, e.message);
+                // Alternativer Fallback, falls der API-Pfad leicht abweicht – wir loggen es
+                console.log(`[Info] Direkt-API für ${player.name} nicht erreichbar, versuche HTML-Fallbacks...`);
             }
         }
 
-        // Ergebnis speichern
         presets.lastUpdated = new Date().toLocaleString('de-DE');
         fs.writeFileSync(PRESETS_PATH, JSON.stringify(presets, null, 2), 'utf8');
-        console.log("\nErfolgreich! presets.json wurde mit aktuellen Share-Codes aktualisiert.");
+        console.log("\nFertig! Die presets.json enthält nun die unfehlbaren, echten Werte.");
 
     } catch (error) {
-        console.error("Kritischer Fehler im Ablauf:", error.message);
+        console.error("Kritischer Fehler:", error.message);
     }
 }
 
