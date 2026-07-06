@@ -22,6 +22,7 @@ jobs:
         run: |
           npm init -y
           npm install axios cheerio
+          npm install puppeteer
 
       - name: Run Scraper Script
         run: node scraper.js
