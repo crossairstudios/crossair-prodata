@@ -78,6 +78,12 @@
     "game": "CS2"
   },
   {
+    "name": "b1t",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy11Mkg5cS1SM0tEYi1pakh1WS1CZml6ci1KOVQ4TiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.osunaCol6aTkO21z6JWtWfi6EyfW0dA15cJKdH2zzoE",
+    "code": "CSGO-u2H9q-R3KDb-ijHuY-Bfizr-J9T8N",
+    "game": "CS2"
+  },
+  {
     "name": "xertioN",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1yVWp3Ni1wa1lCeC02N2Jvcy1wcEY5UC1ITEFmRCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.USL85xlcdcOmuVKIB2ayRMjxlI0t17Lh81jVEvzB_0I",
     "code": "CSGO-rUjw6-pkYBx-67bos-ppF9P-HLAfD",
@@ -90,21 +96,9 @@
     "game": "CS2"
   },
   {
-    "name": "b1t",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy11Mkg5cS1SM0tEYi1pakh1WS1CZml6ci1KOVQ4TiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.osunaCol6aTkO21z6JWtWfi6EyfW0dA15cJKdH2zzoE",
-    "code": "CSGO-u2H9q-R3KDb-ijHuY-Bfizr-J9T8N",
-    "game": "CS2"
-  },
-  {
     "name": "Magnojez",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1aZXV0ZC1CYUhEci1wc3N0Mi1oV3Y3TC1UcE5rTyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.oD9MaTOSUuz1e4Z-JeM3NsESViyP4F9cl2krns4ugvc",
     "code": "CSGO-Zeutd-BaHDr-psst2-hWv7L-TpNkO",
-    "game": "CS2"
-  },
-  {
-    "name": "Staehr",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1Yd2JHdy02c0xVWS1ocWlwVi1PbzZRRy1LSmNoUSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.SlTGmvkjN8r4R8plG1Co23GeZem2jvRvrD5NCQxqhV0",
-    "code": "CSGO-XwbGw-6sLUY-hqipV-Oo6QG-KJchQ",
     "game": "CS2"
   },
   {
@@ -114,21 +108,27 @@
     "game": "CS2"
   },
   {
+    "name": "Staehr",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1Yd2JHdy02c0xVWS1ocWlwVi1PbzZRRy1LSmNoUSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.SlTGmvkjN8r4R8plG1Co23GeZem2jvRvrD5NCQxqhV0",
+    "code": "CSGO-XwbGw-6sLUY-hqipV-Oo6QG-KJchQ",
+    "game": "CS2"
+  },
+  {
     "name": "KSCERATO",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1DdFBuUS1xRks0eS0ycEFFay1aRzlaNS1xaFJxSiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.gS7R3w7KVUb-3XhPg5AWMMfw2naIZo_uZTZnBnajXN8",
     "code": "CSGO-CtPnQ-qFK4y-2pAEk-ZG9Z5-qhRqJ",
     "game": "CS2"
   },
   {
-    "name": "Wicadia",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1XUWh5ei1KY3ZWSy1ZOXB0dy1INTZtay0zN1FtSCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.6tX7HWE1X_QW0xhgC4wT9JMD2HwsrI2mgwdSd1NYXJo",
-    "code": "CSGO-WQhyz-JcvVK-Y9ptw-H56mk-37QmH",
-    "game": "CS2"
-  },
-  {
     "name": "w0nderful",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy13QUQzYy15a3Q1TC16dlo5OC12QmlzUi02c1dQQSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.LmV6hfGvoB7EBPVbjUg-cPAEX6kBQviGkIabtu8GShI",
     "code": "CSGO-wAD3c-ykt5L-zvZ98-vBisR-6sWPA",
+    "game": "CS2"
+  },
+  {
+    "name": "Wicadia",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1XUWh5ei1KY3ZWSy1ZOXB0dy1INTZtay0zN1FtSCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.6tX7HWE1X_QW0xhgC4wT9JMD2HwsrI2mgwdSd1NYXJo",
+    "code": "CSGO-WQhyz-JcvVK-Y9ptw-H56mk-37QmH",
     "game": "CS2"
   },
   {
