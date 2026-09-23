@@ -132,6 +132,12 @@
     "game": "CS2"
   },
   {
+    "name": "w0nderful",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy05Q0VTVC1iRlZldS1WbXVaOC00SmFpdC1VeFFSTyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.0pkwo-yzoxBf2S4uq4TjIVEUGgR7KVFFv9imTLtZnW8",
+    "code": "CSGO-9CEST-bFVeu-VmuZ8-4Jait-UxQRO",
+    "game": "CS2"
+  },
+  {
     "name": "dem0n",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1rY3JZcy0yRmtNeC02WTlLcy14dUNGWi1vMk90USIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.OsTOKQzH6QIrM-8oMjUimcKrBtIP8kQ3jaVayOx_yK0",
     "code": "CSGO-kcrYs-2FkMx-6Y9Ks-xuCFZ-o2OtQ",
@@ -151,8 +157,8 @@
   },
   {
     "name": "npl",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1hYlBaYS1PdEYzNy1Ld1NkVi1DUFFvTi1WQTNZUCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.MvxqH15bYIBzOvVFhv34Y9PLcKmVxEEFMOnD7IRs7_c",
-    "code": "CSGO-abPZa-OtF37-KwSdV-CPQoN-VA3YP",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1hd0VGby0ydWM2QS1SOEdCaC1uUUpHWi00ZldqTSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.setw3wR8u_MMy6FmB0nGA8bJVddvOvp_IxPd0frzBKg",
+    "code": "CSGO-awEFo-2uc6A-R8GBh-nQJGZ-4fWjM",
     "game": "CS2"
   },
   {
@@ -171,12 +177,6 @@
     "name": "molodoy",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy11ajhtYS1mUnNFWS1yblhqRy01QjVLYy0zUXFOTyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.cnXnG_cZ9fvssMDc-UYizHMM_2SNk6KJPPD4hWKhrSk",
     "code": "CSGO-uj8ma-fRsEY-rnXjG-5B5Kc-3QqNO",
-    "game": "CS2"
-  },
-  {
-    "name": "tN1R",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1rcmZuZS1BSmhORi03OFZYSy1ZQlRMMy1MN0pMSCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.640UAXcdCoa8JHUgIxRDRVbQuL3rQaONh_QsMWkmz4A",
-    "code": "CSGO-krfne-AJhNF-78VXK-YBTL3-L7JLH",
     "game": "CS2"
   }
 ]
