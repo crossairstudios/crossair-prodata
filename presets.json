@@ -126,12 +126,6 @@
     "game": "CS2"
   },
   {
-    "name": "HeavyGod",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1BRlNSUS16aDN6Vy1UUVlrTi1ibzlrSi1vWkphQSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.P1eprV2b6ItE1fiOfuQ-KvnIckn7hrjVI-WEcIml6nQ",
-    "code": "CSGO-AFSRQ-zh3zW-TQYkN-bo9kJ-oZJaA",
-    "game": "CS2"
-  },
-  {
     "name": "w0nderful",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy05Q0VTVC1iRlZldS1WbXVaOC00SmFpdC1VeFFSTyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.0pkwo-yzoxBf2S4uq4TjIVEUGgR7KVFFv9imTLtZnW8",
     "code": "CSGO-9CEST-bFVeu-VmuZ8-4Jait-UxQRO",
@@ -147,6 +141,12 @@
     "name": "blameF",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1BdG8zZS1xOVFvVi0yS3hkTS1MV0RuNi1pa0N4SCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.oYIgo2k8EGNCWdyHtVc-tv8VIHOABPCJhlSE40jMoik",
     "code": "CSGO-Ato3e-q9QoV-2KxdM-LWDn6-ikCxH",
+    "game": "CS2"
+  },
+  {
+    "name": "HeavyGod",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcm9zc2hhaXJDb2RlIjoiQ1NHTy1BRlNSUS16aDN6Vy1UUVlrTi1ibzlrSi1vWkphQSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.P1eprV2b6ItE1fiOfuQ-KvnIckn7hrjVI-WEcIml6nQ",
+    "code": "CSGO-AFSRQ-zh3zW-TQYkN-bo9kJ-oZJaA",
     "game": "CS2"
   },
   {
