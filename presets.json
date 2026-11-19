@@ -84,18 +84,6 @@
     "game": "CS2"
   },
   {
-    "name": "insani",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NEbkVtekcybm51c1hoMlB6Yk52TDh1VzZuM3hSR0RpMmRNY0JzR3BKeUxuUiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.h-_GpVl1d4nOgc4ZybL6EDvhhfePII5Y-Yw0LZMnr-E",
-    "code": "CSDnEmzG2nnusXh2PzbNvL8uW6n3xRGDi2dMcBsGpJyLnR",
-    "game": "CS2"
-  },
-  {
-    "name": "blameF",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NHTGtoSFVCTGs0bzRLdHhBZnpMa29WNTdIdFFuUHRQc1lPS2N1Unc1Y0o1UyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.lv_7evwk24lKI2jsMmRJux9447tVRh0_MtlrhzPiUKs",
-    "code": "CSGLkhHUBLk4o4KtxAfzLkoV57HtQnPtPsYOKcuRw5cJ5S",
-    "game": "CS2"
-  },
-  {
     "name": "latto",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N2N2pZUkVEaUV5bVliMmRlWVRXaGNPY01OMzZyaTNHRHV5bnp6b1NTNlk4RiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.LN3bSLPtBvX8m2w2CBcWxL-7O3Jc625NIBYM5a7Msro",
     "code": "CSv7jYREDiEymYb2deYTWhcOcMN36ri3GDuynzzoSS6Y8F",
@@ -555,6 +543,18 @@
     "name": "max",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N6WktienE0WWZFam5MQlptV3NYWVFIeGszeFhFMjk4NmJ5UnFkZFc5SGtFTyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.IB6Awv_IJWBjCxL0Cgh3w9aY4Hqf-R_oWSi4CAaScUw",
     "code": "CSzZKbzq4YfEjnLBZmWsXYQHxk3xXE2986byRqddW9HkEO",
+    "game": "CS2"
+  },
+  {
+    "name": "insani",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NEbkVtekcybm51c1hoMlB6Yk52TDh1VzZuM3hSR0RpMmRNY0JzR3BKeUxuUiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.h-_GpVl1d4nOgc4ZybL6EDvhhfePII5Y-Yw0LZMnr-E",
+    "code": "CSDnEmzG2nnusXh2PzbNvL8uW6n3xRGDi2dMcBsGpJyLnR",
+    "game": "CS2"
+  },
+  {
+    "name": "blameF",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NHTGtoSFVCTGs0bzRLdHhBZnpMa29WNTdIdFFuUHRQc1lPS2N1Unc1Y0o1UyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.lv_7evwk24lKI2jsMmRJux9447tVRh0_MtlrhzPiUKs",
+    "code": "CSGLkhHUBLk4o4KtxAfzLkoV57HtQnPtPsYOKcuRw5cJ5S",
     "game": "CS2"
   },
   {
