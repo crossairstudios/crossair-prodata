@@ -84,24 +84,6 @@
     "game": "CS2"
   },
   {
-    "name": "insani",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NEbkVtekcybm51c1hoMlB6Yk52TDh1VzZuM3hSR0RpMmRNY0JzR3BKeUxuUiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.h-_GpVl1d4nOgc4ZybL6EDvhhfePII5Y-Yw0LZMnr-E",
-    "code": "CSDnEmzG2nnusXh2PzbNvL8uW6n3xRGDi2dMcBsGpJyLnR",
-    "game": "CS2"
-  },
-  {
-    "name": "blameF",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NweXZOVFU4bjdYZkR0d2pXdms5SGs5Nkdpc0FYdTVYT2VkZDc0RVh2R1oyYyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.UIdwWFvbNkgDzPhik-mh9CbgQNXk8KU21zymh6RiEWE",
-    "code": "CSpyvNTU8n7XfDtwjWvk9Hk96GisAXu5XOedd74EXvGZ2c",
-    "game": "CS2"
-  },
-  {
-    "name": "latto",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N2N2pZUkVEaUV5bVliMmRlWVRXaGNPY01OMzZyaTNHRHV5bnp6b1NTNlk4RiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.LN3bSLPtBvX8m2w2CBcWxL-7O3Jc625NIBYM5a7Msro",
-    "code": "CSv7jYREDiEymYb2deYTWhcOcMN36ri3GDuynzzoSS6Y8F",
-    "game": "CS2"
-  },
-  {
     "name": "Spinx",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NNOXllaWY1c29td0JXWHo1eFBrbmo1U2pTU0g2dktFT0RxbzZkNGVXbXY5QSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.cEPL5MIi-xaP1ft6Bdm74Jur_IwRoSUW2aRBg_YjnD8",
     "code": "CSM9yeif5somwBWXz5xPknj5SjSSH6vKEODqo6d4eWmv9A",
@@ -168,6 +150,12 @@
     "game": "CS2"
   },
   {
+    "name": "latto",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N2N2pZUkVEaUV5bVliMmRlWVRXaGNPY01OMzZyaTNHRHV5bnp6b1NTNlk4RiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.LN3bSLPtBvX8m2w2CBcWxL-7O3Jc625NIBYM5a7Msro",
+    "code": "CSv7jYREDiEymYb2deYTWhcOcMN36ri3GDuynzzoSS6Y8F",
+    "game": "CS2"
+  },
+  {
     "name": "sh1ro",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NxdkxKdG40VXJ2elN0cEdKUDlQandWQ1loc0E0NHRrYndEV2JlaUxaS0doRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.H12G65qoOF2C9YPL2SfTQW-kRiqhfrKmMypCI7cMGtE",
     "code": "CSqvLJtn4UrvzStpGJP9PjwVCYhsA44tkbwDWbeiLZKGhF",
@@ -193,8 +181,8 @@
   },
   {
     "name": "doc",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NBM1NjQ2l1OG1adnhlZmVHWHE2Unh5S3BTcmJ0TjZxcERObkFTNjNDRk5xRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.afm9VB3ZXVoCbk9LPk1PgV-z7zbjSDdFZVPzgNb7LlI",
-    "code": "CSA3ScCiu8mZvxefeGXq6RxyKpSrbtN6qpDNnAS63CFNqF",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NaU1RmcFNVeWE3NHk1R1BWdnMzaGZPd3NWTEFHYk1HVnZMdUtjQVpSTE5uUiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.NACesfWrzEasDhxa9uS7ih8P9sWGToYBgcVYmqVSmXs",
+    "code": "CSZSTfpSUya74y5GPVvs3hfOwsVLAGbMGVvLuKcAZRLNnR",
     "game": "CS2"
   },
   {
@@ -241,8 +229,8 @@
   },
   {
     "name": "xiELO",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1M2VzIzelRWZndmdlVlNkc1S09ydmZqUlBMcmR4NHhpdmVXbXpvdGtpeGZIaSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.F-k1BowGa91GbXr2VNijsvlVUnYzUx0c2_RL6R8P5Qw",
-    "code": "CS6W23zTVfwfvUe6G5KOrvfjRPLrdx4xiveWmzotkixfHi",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NFZHJvbVRHTTdpajRCV2VEaVdSaHZQNXBHU1lUWm9PM1RGTHlFMnVLVDRQRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.u39mgmCGzW5Su9ed0kLIdBXXeS_yD1NlBgb4PZ_qGKE",
+    "code": "CSEdromTGM7ij4BWeDiWRhvP5pGSYTZoO3TFLyE2uKT4PF",
     "game": "CS2"
   },
   {
@@ -271,8 +259,8 @@
   },
   {
     "name": "malbsMd",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NXR1lDYXplbkJaNExiZVZOWXJ0UGZTcWszdVRzSHluY1B0ZFc4Nm9FM1Q0ViIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.RUFyDTtBFwBU3SBjlTEpWNteqfYZCW4Y8idMrk8For0",
-    "code": "CSWGYCazenBZ4LbeVNYrtPfSqk3uTsHyncPtdW86oE3T4V",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NoZVFLalVxeHp3VHNDTEdpNUtla3c0OW5Lem5POUdIYTJSOVhtd2kzN1FTYiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.4NFYBlBJXBVvySDfuG-NTUGzlAUYcUiF0sq8YGbIIXs",
+    "code": "CSheQKjUqxzwTsCLGi5Kekw49nKznO9GHa2R9Xmwi37QSb",
     "game": "CS2"
   },
   {
@@ -295,14 +283,14 @@
   },
   {
     "name": "rdnzao",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NPcnNjWExxVVV3R3BOdDhwMk5weEMyQ29OcVdYY1JRd0I4dmhFU2twQVR5RiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.UuYmUarXlUkSoDfPji0SWVw_zsuoliV5yjWCls-1tuk",
-    "code": "CSOrscXLqUUwGpNt8p2NpxC2CoNqWXcRQwB8vhESkpATyF",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NxdkxKdG40VXJ2elN0cEdKUDlQandWQ1loc0E0NHRrYndEV2JlaUxaS0doRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.H12G65qoOF2C9YPL2SfTQW-kRiqhfrKmMypCI7cMGtE",
+    "code": "CSqvLJtn4UrvzStpGJP9PjwVCYhsA44tkbwDWbeiLZKGhF",
     "game": "CS2"
   },
   {
     "name": "Jame",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1M5WURDVnY3bzVWOGQzM3BEeXl6UG1ZTUVmNll0d2RYbnF6bzh3SFc3bUxYSiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.uuIIqieDYWKPHQPzMhPsmjvABdcQ-QwdvGxCh541Su4",
-    "code": "CS9YDCVv7o5V8d33pDyyzPmYMEf6YtwdXnqzo8wHW7mLXJ",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NoUkt3NGl1UmF2WVF1bUdOSGRETjdkc25GaFJvRU5NWUc2TDRia1hyd1pDVyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.DBUxczn3vMCjc3R1VjLHKlkpdZ6OI_IdS8KAcbv8oMc",
+    "code": "CShRKw4iuRavYQumGNHdDN7dsnFhRoENMYG6L4bkXrwZCW",
     "game": "CS2"
   },
   {
@@ -325,8 +313,8 @@
   },
   {
     "name": "koala",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NxZjhwdWFRQ003c1JIc3BCVUtZY01MZFBLUzI3OU5RV1VqcWp1Y3paaDZwRyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.4VdmmSte0r6lxDtDxUUmAGeKENE1i9K5XRBMfXVt8QQ",
-    "code": "CSqf8puaQCM7sRHspBUKYcMLdPKS279NQWUjqjuczZh6pG",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NkeWhpSEg0QUdHZjc2cUVPUkF3TGFCenBHUU9iaXU1cWljR3FUTlFxWEo4RyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.viuG0v4ov5Or7TD7sv7FfZnj21yDucTsdNV4WWb4YHc",
+    "code": "CSdyhiHH4AGGf76qEORAwLaBzpGQObiu5qicGqTNQqXJ8G",
     "game": "CS2"
   },
   {
@@ -391,14 +379,14 @@
   },
   {
     "name": "dgt",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NpcWRETzhDdEJPUk53SE5TcEROblhqZkdNQ3ZlZlJWcHVBalNIQ09DcldoRSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.q-zUOF1S0WC_F3ntEp2xLwrimK6HamxI_AvEH_emT7Q",
-    "code": "CSiqdDO8CtBORNwHNSpDNnXjfGMCvefRVpuAjSHCOCrWhE",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NqWG83QlcydkZmY0tRSHlyOEpyekYydmVESFk0RVNtWEhaTjdYS1JlM1dhYiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.acZJSJC3ovTAF_2cQlCCHhKJAWyg-c-dU1vvqLtXCLY",
+    "code": "CSjXo7BW2vFfcKQHyr8JrzF2veDHY4ESmXHZN7XKRe3Wab",
     "game": "CS2"
   },
   {
     "name": "JBa",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N5dHZoR2ZhTUZwQWNRdThXVU0yVHFSZjVTdW5YVU43SGlLN1Y3eXVLVDRQRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.URdaQ_TOm2Xo12v1pAL8xxt4oyZWAdmC1XyUvPxYiZo",
-    "code": "CSytvhGfaMFpAcQu8WUM2TqRf5SunXUN7HiK7V7yuKT4PF",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NxdkxKdG40VXJ2elN0cEdKUDlQandWQ1loc0E0NHRrYndEV2JlaUxaS0doRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.H12G65qoOF2C9YPL2SfTQW-kRiqhfrKmMypCI7cMGtE",
+    "code": "CSqvLJtn4UrvzStpGJP9PjwVCYhsA44tkbwDWbeiLZKGhF",
     "game": "CS2"
   },
   {
@@ -457,8 +445,8 @@
   },
   {
     "name": "FL1T",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1Nlc2p5U2NGam1TVmkyNGZhRURldnZCOFMyN1B6NmJtSDZHbzVGNFpaS0dpaCIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.AQADDeJVIJzErtRzblcW1R6ImNFTcghPfUdhWY9Gf8M",
-    "code": "CSesjyScFjmSVi24faEDevvB8S27Pz6bmH6Go5F4ZZKGih",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NOd25GVlZSSlM2RUxpdVhybzNVa2FIYXBjQ25pQ0RWNnNRSjcyamNBaDNKYyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.4vd8I8vrcvcFeeCPLU155tS-eyIt4NJ6vUa1F8Gu6PQ",
+    "code": "CSNwnFVVRJS6ELiuXro3UkaHapcCniCDV6sQJ72jcAh3Jc",
     "game": "CS2"
   },
   {
@@ -469,8 +457,8 @@
   },
   {
     "name": "HObbit",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NtSzJvRzVDaWZRVlNacksySmlBYUdyUjlRa0xBaHdFdUR0TVZQRnRZWlZKZSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.CmEeBGfllm3Nc3lvD0j4gumOVnjMC8BX6-L9NoWJvbc",
-    "code": "CSmK2oG5CifQVSZrK2JiAaGrR9QkLAhwEuDtMVPFtYZVJe",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NGNjhFWmNOVUsydG5KcHhPczRhNllSTm1CTk1KTUJhSDVBakFTNjNDRk5xRiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.VTak_tp04QtkPotXz3ns7VyWyvD73ay6eLK9qI8mZj0",
+    "code": "CSF68EZcNUK2tnJpxOs4a6YRNmBNMJMBaH5AjAS63CFNqF",
     "game": "CS2"
   },
   {
@@ -553,8 +541,8 @@
   },
   {
     "name": "zweih",
-    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NjSHFUcGZ6eGNWdGh3dlFXZDg3U0xDVnBobnBlWGNTcUhDRUhzSjQ4QzZYbSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.xUvfaTWsBk5lWDZOEPL43U-izQGcPTAZnZPP3AksP0g",
-    "code": "CScHqTpfzxcVthwvQWd87SLCVphnpeXcSqHCEHsJ48C6Xm",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N6cktidXEzaG9qb2tlUUI3RTRGUTR1N2tzRnlYb1J6aFE5eU01b1FqTVdRaiIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.XiqsgZgi-_CY7P0TgwaFlHYx-81s8_KW9ckmKKnFfH8",
+    "code": "CSzrKbuq3hojokeQB7E4FQ4u7ksFyXoRzhQ9yM5oQjMWQj",
     "game": "CS2"
   },
   {
@@ -597,6 +585,18 @@
     "name": "arT",
     "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1N5aGR1UnV1V0xyd1RpaWVxcmpiTEphU1Q0bXlyVnk4OTkzeDhxNUZLNkRIRSIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.Cq6vDPUNEni2zGf4GG-G64dlYfSKnKg3lE7vgYDxSF4",
     "code": "CSyhduRuuWLrwTiieqrjbLJaST4myrVy8993x8q5FK6DHE",
+    "game": "CS2"
+  },
+  {
+    "name": "nafany",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1NXUEdlWWFqcG9qSDNiYnVCZDRxUXp5bU40NEppcXVETlNUVVpOeFZ2R1oyYyIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.7a6D7If9SI4U3F2IVf7j6_yUSdCEVO5_YxlINSbj9WA",
+    "code": "CSWPGeYajpojH3bbuBd4qQzymN44JiquDNSTUZNxVvGZ2c",
+    "game": "CS2"
+  },
+  {
+    "name": "max",
+    "imageUrl": "https://d81gju9fq33lb.cloudfront.net/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2Ijo0LCJjcm9zc2hhaXJDb2RlIjoiQ1M5ejJBWk5MQXFNeWl2UHJDb3ZwYmJPTmFtTHR2ZnRqYTRDeXdjaFRhNVM0ViIsIndpZHRoIjoxMjgsImhlaWdodCI6MTI4fQ.mS07dVoB4q3SzzXi4YVfaHZu1jSBhE_uDqnDJ1Q8Bhk",
+    "code": "CS9z2AZNLAqMyivPrCovpbbONamLtvftja4CywchTa5S4V",
     "game": "CS2"
   }
 ]
